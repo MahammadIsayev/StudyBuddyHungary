@@ -2,8 +2,13 @@
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Navbar from './scenes/navbar/page';
+import MainHome from './scenes/mainhome/page';
+import { useEffect, useState } from 'react';
+import { SelectedPage } from './shared/types';
 
 export default function Home() {
+  const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
+  const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
   const session = useSession({
     required: true,
     onUnauthenticated() {
@@ -11,13 +16,26 @@ export default function Home() {
     },
   });
 
+  useEffect(() => {
+    const scrollFunction = () => {
+      if (window.scrollY === 0) {
+        setIsTopOfPage(true);
+        setSelectedPage(SelectedPage.Home)
+      } else {
+        setIsTopOfPage(false);
+      }
+    }
+    window.addEventListener("scroll", scrollFunction)
+    return () => { window.removeEventListener("scroll", scrollFunction) }
+  }, []);
+
+
   return (
-    <div className="p-8">
+    <div>
       <div className='bg-gray-20'>
-        <Navbar></Navbar>
+        <Navbar isTopOfPage={isTopOfPage} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
+        <MainHome setSelectedPage={setSelectedPage}/>
       </div>
-      {/* <div className='text-white'>{session?.data?.user?.email }</div>
-      <button className='text-white' onClick={() => signOut()}>Logout</button> */}
     </div>
   )
 }

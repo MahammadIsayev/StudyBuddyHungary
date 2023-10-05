@@ -1,34 +1,58 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid'
-import Logo from './assets/Logo.png';
+import { useState } from "react";
+import Image from 'next/image';
+import Link from "./Link";
+import { SelectedPage } from "@/app/shared/types";
+import { signOut } from "next-auth/react";
 
+type Props = {
+    isTopOfPage: boolean;
+    selectedPage: SelectedPage;
+    setSelectedPage: (value: SelectedPage) => void;
+};
 
-type Props = {}
+const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
+    console.log(isTopOfPage)
+    const navbarBackground = !isTopOfPage ? "" : "bg-orange-200 drop-shadow-md";
 
-const Navbar = (props: Props) => {
     return (
         <nav>
-            <div className='flex items-center justify-center fixed top-0 z-30 w-full py-6'>
-                <div className='flex items-center justify-center mx-auto w-5/6'>
-                    <div className='flex items-center justify-center w-full gap-16'>
-                        <img className='object-cover h-36 w-64.5' alt="logo" src="/assets/Logo.png" />
-                        <div className='flex items-center justify-center w-full'>
-                            <div className='flex items-center justify-center gap-8 text-sm'>
-                                <p>Home</p>
-                                <p>Search</p>
-                                <p>Forum</p>
-                                <p>Contact</p>
+            <div className={`${navbarBackground} flex items-center justify-between fixed top-0 z-30 w-full py-2`}>
+                <div className={`flex items-center justify-between mx-auto w-5/6`}>
+                    <div className={`flex items-center justify-between w-full gap-16`}>
+                        <Image src="/assets/Logo.png" alt="Logo" width={120} height={100} />
+
+                        <div className={`flex items-center justify-between w-full`}>
+                            <div className={`flex items-center justify-between gap-8 text-lg`}>
+                                <Link
+                                    page="Home"
+                                    selectedPage={selectedPage}
+                                    setSelectedPage={setSelectedPage}
+                                />
+                                <Link
+                                    page="Community"
+                                    selectedPage={selectedPage}
+                                    setSelectedPage={setSelectedPage}
+                                />
+                                <Link
+                                    page="Forum"
+                                    selectedPage={selectedPage}
+                                    setSelectedPage={setSelectedPage}
+                                />
+                                <Link
+                                    page="Chat"
+                                    selectedPage={selectedPage}
+                                    setSelectedPage={setSelectedPage}
+                                />
                             </div>
-                            <div className='flex items-center justify-center gap-8'>
-                                <p>Sign in</p>
+                            <div className={`flex items-center justify-between gap-8 text-lg`}>
+                                <button onClick={() => signOut()}>Logout</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-    )
-}
+    );
+};
 
 export default Navbar;
