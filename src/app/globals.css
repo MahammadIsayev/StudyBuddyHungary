@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #ff5722;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #ff4500;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+body {
+    scroll-snap-type: y mandatory;
+}
+
+body {
+    scroll-behavior: smooth;
+}

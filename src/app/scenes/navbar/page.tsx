@@ -12,7 +12,7 @@ type Props = {
 
 const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     console.log(isTopOfPage)
-    const navbarBackground = !isTopOfPage ? "" : "bg-[#fbbb5b] drop-shadow-md";
+    const navbarBackground = !isTopOfPage ? "bg-[#fbbb5b] drop-shadow-xl" : "bg-[#fbbb5b]";
 
     return (
         <nav>
