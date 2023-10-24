@@ -3,6 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Navbar from './scenes/navbar/page';
 import MainHome from './scenes/mainhome/page';
+import Community from './scenes/community/page';
 import { useEffect, useState } from 'react';
 import { SelectedPage } from './shared/types';
 
@@ -35,6 +36,7 @@ export default function Home() {
       <div className='bg-gray-20'>
         <Navbar isTopOfPage={isTopOfPage} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
         <MainHome setSelectedPage={setSelectedPage}/>
+        <Community setSelectedPage={setSelectedPage}/>
       </div>
     </div>
   )

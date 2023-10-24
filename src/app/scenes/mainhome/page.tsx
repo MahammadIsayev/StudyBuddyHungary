@@ -14,7 +14,7 @@ type Props = {
 
 const MainHome = ({ setSelectedPage }: Props) => {
   return (
-    <>
+    <div>
       <section id="home" className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0 mt-12">
         {/* IMAGE AND MAIN HEADER */}
         <motion.div
@@ -134,7 +134,7 @@ const MainHome = ({ setSelectedPage }: Props) => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
