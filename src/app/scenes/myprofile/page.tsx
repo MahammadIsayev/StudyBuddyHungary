@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Image from "next/image";
-import Link from "./Link";
 import { SelectedPage } from "@/app/shared/types";
 import { signOut } from "next-auth/react";
 import Modal from "../modal/page";
@@ -24,19 +23,7 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth = getAuth();
 
-
-type Props = {
-    isTopOfPage: boolean;
-    selectedPage: SelectedPage;
-    setSelectedPage: (value: SelectedPage) => void;
-};
-
-const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
-    const navbarBackground = !isTopOfPage
-        ? "bg-[#fbbb5b] drop-shadow-xl"
-        : "bg-[#fbbb5b]";
-
-    const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     const [updatedProfileData, setUpdatedProfileData] = useState({
         university: "",
         major: "",
@@ -47,13 +34,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
     const handleUpdateProfile = async () => {
 
+        const userId = "XntuMXqony0GmDaGk17c";
         try {
-            const user = auth.currentUser;
-            if (!user) {
-                console.error("User is not authenticated");
-                return;
-            }
-            const userDocRef = doc(db, "users", user.uid);
+            const userDocRef = doc(db, "users", userId);
             const dataToUpdate = {
                 university: updatedProfileData.university,
                 major: updatedProfileData.major,
@@ -63,6 +46,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
             await updateDoc(userDocRef, dataToUpdate);
             console.log("User profile data updated:", dataToUpdate);
+
             setUpdatedProfileData((prevData) => ({
                 ...prevData,
                 university: "",
@@ -76,31 +60,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         }
     };
 
-
+const MyProfile = () => {
     return (
-        <nav>
-            <div className={`fixed top-0 w-full py-2 ${navbarBackground} flex items-center justify-between z-30`}>
-                <div className="w-5/6 mx-auto flex items-center justify-between">
-                    <div className="w-full gap-16 flex items-center justify-between">
-                        <Image src="/assets/Logo.png" alt="Logo" width={140} height={100} />
-
-                        <div className="w-full flex items-center justify-between">
-                            <div className="text-lg gap-8 flex items-center justify-between">
-                                <Link page="Home" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-                                <Link page="Community" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-                                <Link page="Forum" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-                                <Link page="Messages" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-                            </div>
-                            <div className="text-lg gap-8 flex items-center justify-between">
-                                <button onClick={() => setProfileModalOpen(true)}>My Profile</button>
-                                <button onClick={() => signOut()}>Logout</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <Modal open={isProfileModalOpen} onClose={() => setProfileModalOpen(false)}>
+        <Modal open={isProfileModalOpen} onClose={() => setProfileModalOpen(false)}>
                 <div className="mt-10">
                     <form>
                         <div className="mb-8">
@@ -301,8 +263,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     </form>
                 </div>
             </Modal>
-        </nav>
-    );
-};
+    )
+}
 
-export default Navbar;
+export default MyProfile;

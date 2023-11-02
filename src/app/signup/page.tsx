@@ -1,16 +1,41 @@
 'use client';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/router';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
 
-  const signup = () => {
-    createUserWithEmailAndPassword(auth, email, password);
+  // const signup = () => {
+  //   createUserWithEmailAndPassword(auth, email, password);
+  // };
+  const signup = async () => {
+    if (password === passwordAgain) {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        const user = userCredential.user;
+        const userRef = doc(db, 'users', user.uid);
+
+        const userData = {
+          university: "",
+          major: "",
+          city: "",
+          educationLevel: "",
+        };
+
+        await setDoc(userRef, userData);
+
+        window.location.href = '/signin';
+
+      } catch (error) {
+        console.error('Error signing up:', error);
+      }
+    }
   };
 
   return (
