@@ -4,7 +4,7 @@ import Link from "./Link";
 import { SelectedPage } from "@/app/shared/types";
 import { signOut } from "next-auth/react";
 import Modal from "../modal/page";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, } from 'firebase/firestore';
@@ -31,6 +31,14 @@ type Props = {
     setSelectedPage: (value: SelectedPage) => void;
 };
 
+interface ProfileData {
+    fullName: string;
+    university: string;
+    major: string;
+    city: string;
+    educationLevel: string;
+}
+
 const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     const navbarBackground = !isTopOfPage
         ? "bg-[#fbbb5b] drop-shadow-xl"
@@ -38,6 +46,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     const [updatedProfileData, setUpdatedProfileData] = useState({
+        fullName: "",
         university: "",
         major: "",
         city: "",
@@ -46,7 +55,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
 
     const handleUpdateProfile = async () => {
-
         try {
             const user = auth.currentUser;
             if (!user) {
@@ -54,27 +62,65 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 return;
             }
             const userDocRef = doc(db, "users", user.uid);
-            const dataToUpdate = {
-                university: updatedProfileData.university,
-                major: updatedProfileData.major,
-                city: updatedProfileData.city,
-                educationLevel: updatedProfileData.educationLevel,
-            };
 
-            await updateDoc(userDocRef, dataToUpdate);
-            console.log("User profile data updated:", dataToUpdate);
-            setUpdatedProfileData((prevData) => ({
-                ...prevData,
-                university: "",
-                major: "",
-                city: "",
-                educationLevel: "",
-            }));
-            setProfileModalOpen(false);
+            // Fetch the existing user data from the database
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const existingUserData = userDoc.data() as ProfileData;
+
+                // Create an object for updated fields
+                const updatedFields: Partial<ProfileData> = {};
+
+                // Update only if fields in updatedProfileData are not empty
+                if (updatedProfileData.fullName !== "") {
+                    updatedFields.fullName = updatedProfileData.fullName;
+                }
+                if (updatedProfileData.university !== "") {
+                    updatedFields.university = updatedProfileData.university;
+                }
+                if (updatedProfileData.major !== "") {
+                    updatedFields.major = updatedProfileData.major;
+                }
+                if (updatedProfileData.city !== "") {
+                    updatedFields.city = updatedProfileData.city;
+                }
+                if (updatedProfileData.educationLevel !== "") {
+                    updatedFields.educationLevel = updatedProfileData.educationLevel;
+                }
+
+                // Convert ProfileData and updatedFields into plain JavaScript objects
+                const existingDataObj = { ...existingUserData };
+                const updatedFieldsObj = { ...updatedFields };
+
+                // Merge the updated fields with existing data
+                const mergedData = { ...existingDataObj, ...updatedFieldsObj };
+
+                // Update the document with merged data
+                await updateDoc(userDocRef, mergedData);
+                console.log("User profile data updated:", mergedData);
+
+                // Clear the form fields
+                setUpdatedProfileData((prevData) => ({
+                    ...prevData,
+                    fullName: "",
+                    university: "",
+                    major: "",
+                    city: "",
+                    educationLevel: "",
+                }));
+
+                setProfileModalOpen(false);
+            } else {
+                console.error("User document doesn't exist.");
+            }
         } catch (error) {
             console.error("Error updating user profile data:", error);
         }
     };
+
+
+
+
 
 
     return (
@@ -103,6 +149,15 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
             <Modal open={isProfileModalOpen} onClose={() => setProfileModalOpen(false)}>
                 <div className="mt-10">
                     <form>
+                        <div className="mb-8">
+                            <label className="block text-sm font-medium text-orange-400 font-semibold">Full Name</label>
+                            <input
+                                type="text"
+                                value={updatedProfileData.fullName}
+                                onChange={(e) => setUpdatedProfileData({ ...updatedProfileData, fullName: e.target.value })}
+                                className="mt-1 p-2 border rounded w-full"
+                            />
+                        </div>
                         <div className="mb-8">
                             <label className="block text-sm text-orange-400 font-semibold">City</label>
                             <select
@@ -176,101 +231,66 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 className="mt-1 p-2 border rounded w-full"
                             >
                                 <option value=""></option>
-                                <option value="eotvos-lorand-university">Eötvös Loránd University</option>
-                                <option value="central-european-university">Central European University</option>
-                                <option value="university-of-debrecen">University of Debrecen</option>
-                                <option value="university-of-pecs">University of Pécs</option>
-                                <option value="budapest-university-of-technology-and-economics">Budapest University of Technology and Economics</option>
-                                <option value="corvinus-university-of-budapest">Corvinus University of Budapest</option>
-                                <option value="semmelweis-university">Semmelweis University</option>
-                                <option value="university-of-szeged">University of Szeged</option>
-                                <option value="szechenyi-istvan-university">Széchenyi István University</option>
-                                <option value="university-of-miskolc">University of Miskolc</option>
-                                <option value="university-of-physical-education">University of Physical Education</option>
-                                <option value="baptist-theological-seminary">Baptist Theological Seminary</option>
-                                <option value="international-business-school">International Business School</option>
-                                <option value="mc-daniel-college-budapest">McDaniel College Budapest</option>
-                                <option value="moholy-nagy-university-of-art-and-design">Moholy-Nagy University of Art and Design</option>
-                                <option value="obuda-university">Óbuda University</option>
-                                <option value="premier-business-school">Premier Business School</option>
-                                <option value="reformed-theological-university">Reformed Theological University</option>
-                                <option value="tancsics-mihaly-vocational-college">Tancsics Mihály Vocational College</option>
-                                <option value="the-hungarian-university-of-fine-arts">The Hungarian University of Fine Arts</option>
-                                <option value="united-theological-seminary">United Theological Seminary</option>
-                                <option value="university-of-physical-education">University of Physical Education</option>
-                                <option value="berzsenyi-daniel-college">Berzsenyi Dániel College</option>
-                                <option value="budapest-metropolitan-university">Budapest Metropolitan University</option>
-                                <option value="budapest-university-of-jewish-studies">Budapest University of Jewish Studies</option>
-                                <option value="college-of-communication-and-business">College of Communication and Business</option>
-                                <option value="european-business-school-budapest">European Business School Budapest</option>
-                                <option value="evangelical-lutheran-theological-university">Evangelical Lutheran Theological University</option>
-                                <option value="gothard-theological-college">Gothard Theological College</option>
-                                <option value="kodolanyi-janos-university-of-applied-sciences">Kodolányi János University of Applied Sciences</option>
-                                <option value="liszt-ferenc-academy-of-music">Liszt Ferenc Academy of Music</option>
-                                <option value="moholy-nagy-university-of-art-and-design">Moholy-Nagy University of Art and Design</option>
-                                <option value="obuda-university">Óbuda University</option>
-                                <option value="premier-business-school">Premier Business School</option>
-                                <option value="reformed-theological-university">Reformed Theological University</option>
-                                <option value="tancsics-mihaly-vocational-college">Tancsics Mihály Vocational College</option>
-                                <option value="the-hungarian-university-of-fine-arts">The Hungarian University of Fine Arts</option>
-                                <option value="united-theological-seminary">United Theological Seminary</option>
-                                <option value="university-of-physical-education">University of Physical Education</option>
-                                <option value="berzsenyi-daniel-college">Berzsenyi Dániel College</option>
-                                <option value="budapest-metropolitan-university">Budapest Metropolitan University</option>
-                                <option value="budapest-university-of-jewish-studies">Budapest University of Jewish Studies</option>
-                                <option value="college-of-communication-and-business">College of Communication and Business</option>
-                                <option value="european-business-school-budapest">European Business School Budapest</option>
-                                <option value="evangelical-lutheran-theological-university">Evangelical Lutheran Theological University</option>
-                                <option value="gothard-theological-college">Gothard Theological College</option>
-                                <option value="kodolanyi-janos-university-of-applied-sciences">Kodolányi János University of Applied Sciences</option>
-                                <option value="liszt-ferenc-academy-of-music">Liszt Ferenc Academy of Music</option>
-                                <option value="moholy-nagy-university-of-art-and-design">Moholy-Nagy University of Art and Design</option>
-                                <option value="obuda-university">Óbuda University</option>
-                                <option value="premier-business-school">Premier Business School</option>
-                                <option value="reformed-theological-university">Reformed Theological University</option>
-                                <option value="tancsics-mihaly-vocational-college">Tancsics Mihály Vocational College</option>
-                                <option value="the-hungarian-university-of-fine-arts">The Hungarian University of Fine Arts</option>
-                                <option value="united-theological-seminary">United Theological Seminary</option>
-                                <option value="university-of-physical-education">University of Physical Education</option>
-                                <option value="berzsenyi-daniel-college">Berzsenyi Dániel College</option>
-                                <option value="budapest-metropolitan-university">Budapest Metropolitan University</option>
-                                <option value="budapest-university-of-jewish-studies">Budapest University of Jewish Studies</option>
-                                <option value="college-of-communication-and-business">College of Communication and Business</option>
-                                <option value="european-business-school-budapest">European Business School Budapest</option>
-                                <option value="evangelical-lutheran-theological-university">Evangelical Lutheran Theological University</option>
-                                <option value="gothard-theological-college">Gothard Theological College</option>
-                                <option value="kodolanyi-janos-university-of-applied-sciences">Kodolányi János University of Applied Sciences</option>
-                                <option value="liszt-ferenc-academy-of-music">Liszt Ferenc Academy of Music</option>
-                                <option value="national-public-service-university">National Public Service University</option>
-                                <option value="perenyi-peter-catholic-university">Perényi Péter Catholic University</option>
-                                <option value="saint-stephen-university">Saint Stephen University</option>
-                                <option value="sapientia-hungarian-university-of-transylvania">Sapientia Hungarian University of Transylvania</option>
-                                <option value="szent-ignac-catholic-student-hall">Szent Ignác Catholic Student Hall</option>
-                                <option value="szent-istvan-university">Szent István University</option>
-                                <option value="szent-kereszt-catholic-university">Szent Kereszt Catholic University</option>
-                                <option value="szentpeteri-martin-lutheran-evangelical-theological-college">Szentpéteri Martin Lutheran Evangelical Theological College</option>
-                                <option value="tomori-pal-college">Tomori Pál College</option>
-                                <option value="university-of-dunaújváros">University of Dunaújváros</option>
-                                <option value="university-of-kaposvar">University of Kaposvár</option>
-                                <option value="university-of-physical-education">University of Physical Education</option>
-                                <option value="university-of-pecs">University of Pécs</option>
-                                <option value="university-of-public-service">University of Public Service</option>
-                                <option value="university-of-sopron">University of Sopron</option>
-                                <option value="university-of-west-hungary">University of West Hungary</option>
-                                <option value="university-of-zena">University of Zena</option>
-                                <option value="west-hungarian-university">West Hungarian University</option>
-                                <option value="david-sinyard-student-apartment-college">David Sinyard Student Apartment College</option>
-                                <option value="hungarian-university-of-fine-arts">Hungarian University of Fine Arts</option>
-                                <option value="janus-pannonius-university">Janus Pannonius University</option>
-                                <option value="karoly-robert-college">Károly Róbert College</option>
-                                <option value="kodolanyi-janos-college">Kodolányi János College</option>
-                                <option value="kossuth-lajos-student-dormitory">Kossuth Lajos Student Dormitory</option>
-                                <option value="mosonmagyarovar-vasvari-palyamuhely-secondary-school">Mosonmagyaróvár Vásári Pályaműhely Secondary School</option>
-                                <option value="national-university-of-public-service">National University of Public Service</option>
-                                <option value="peter-pazmany-catholic-university">Pázmány Péter Catholic University</option>
-                                <option value="sargfabrik-theatre-school">SárgaFüzet Theatre School</option>
-                                <option value="szolnok-university-college">Szolnok University College</option>
-                                <option value="the-szent-istvan-institute">The Szent István Institute</option>
+                                <option value="Eötvös Loránd University">Eötvös Loránd University</option>
+                                <option value="Central European University">Central European University</option>
+                                <option value="University of Debrecen">University of Debrecen</option>
+                                <option value="University of Pécs">University of Pécs</option>
+                                <option value="Budapest University of Technology and Economics">Budapest University of Technology and Economics</option>
+                                <option value="Corvinus University of Budapest">Corvinus University of Budapest</option>
+                                <option value="Semmelweis University">Semmelweis University</option>
+                                <option value="University of Szeged">University of Szeged</option>
+                                <option value="Széchenyi István University">Széchenyi István University</option>
+                                <option value="University of Miskolc">University of Miskolc</option>
+                                <option value="University of Physical Education">University of Physical Education</option>
+                                <option value="Baptist Theological Seminary">Baptist Theological Seminary</option>
+                                <option value="International Business School">International Business School</option>
+                                <option value="McDaniel College Budapest">McDaniel College Budapest</option>
+                                <option value="Moholy-Nagy University of Art and Design">Moholy-Nagy University of Art and Design</option>
+                                <option value="Óbuda University">Óbuda University</option>
+                                <option value="Premier Business School">Premier Business School</option>
+                                <option value="Reformed Theological University">Reformed Theological University</option>
+                                <option value="Tancsics Mihály Vocational College">Tancsics Mihály Vocational College</option>
+                                <option value="The Hungarian University of Fine Arts">The Hungarian University of Fine Arts</option>
+                                <option value="United Theological Seminary">United Theological Seminary</option>
+                                <option value="University of Physical Education">University of Physical Education</option>
+                                <option value="Berzsenyi Dániel College">Berzsenyi Dániel College</option>
+                                <option value="Budapest Metropolitan University">Budapest Metropolitan University</option>
+                                <option value="Budapest University of Jewish Studies">Budapest University of Jewish Studies</option>
+                                <option value="College of Communication and Business">College of Communication and Business</option>
+                                <option value="European Business School Budapest">European Business School Budapest</option>
+                                <option value="Evangelical Lutheran Theological University">Evangelical Lutheran Theological University</option>
+                                <option value="Gothard Theological College">Gothard Theological College</option>
+                                <option value="Kodolányi János University of Applied Sciences">Kodolányi János University of Applied Sciences</option>
+                                <option value="Liszt Ferenc Academy of Music">Liszt Ferenc Academy of Music</option>
+                                <option value="National Public Service University">National Public Service University</option>
+                                <option value="Perényi Péter Catholic University">Perényi Péter Catholic University</option>
+                                <option value="Saint Stephen University">Saint Stephen University</option>
+                                <option value="Sapientia Hungarian University of Transylvania">Sapientia Hungarian University of Transylvania</option>
+                                <option value="Szent Ignác Catholic Student Hall">Szent Ignác Catholic Student Hall</option>
+                                <option value="Szent István University">Szent István University</option>
+                                <option value="Szent Kereszt Catholic University">Szent Kereszt Catholic University</option>
+                                <option value="Szentpéteri Martin Lutheran Evangelical Theological College">Szentpéteri Martin Lutheran Evangelical Theological College</option>
+                                <option value="Tomori Pál College">Tomori Pál College</option>
+                                <option value="University of Dunaújváros">University of Dunaújváros</option>
+                                <option value="University of Kaposvár">University of Kaposvár</option>
+                                <option value="University of Pécs">University of Pécs</option>
+                                <option value="University of Public Service">University of Public Service</option>
+                                <option value="University of Sopron">University of Sopron</option>
+                                <option value="University of West Hungary">University of West Hungary</option>
+                                <option value="University of Zena">University of Zena</option>
+                                <option value="West Hungarian University">West Hungarian University</option>
+                                <option value="David Sinyard Student Apartment College">David Sinyard Student Apartment College</option>
+                                <option value="Hungarian University of Fine Arts">Hungarian University of Fine Arts</option>
+                                <option value="Janus Pannonius University">Janus Pannonius University</option>
+                                <option value="Károly Róbert College">Károly Róbert College</option>
+                                <option value="Kodolányi János College">Kodolányi János College</option>
+                                <option value="Kossuth Lajos Student Dormitory">Kossuth Lajos Student Dormitory</option>
+                                <option value="Mosonmagyaróvár Vásári Pályaműhely Secondary School">Mosonmagyaróvár Vásári Pályaműhely Secondary School</option>
+                                <option value="National University of Public Service">National University of Public Service</option>
+                                <option value="Pázmány Péter Catholic University">Pázmány Péter Catholic University</option>
+                                <option value="SárgaFüzet Theatre School">SárgaFüzet Theatre School</option>
+                                <option value="Szolnok University College">Szolnok University College</option>
+                                <option value="The Szent István Institute">The Szent István Institute</option>
                             </select>
                         </div>
                         <div className="mb-8">
@@ -295,7 +315,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 className="mt-1 p-2 border rounded w-full"
                             />
                         </div>
-                        <button onClick={handleUpdateProfile} className="bg-[#fbbb5b] font-semibold text-black px-4 py-2 rounded ">
+                        <button onClick={handleUpdateProfile} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded ">
                             Update
                         </button>
                     </form>

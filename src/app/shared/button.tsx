@@ -10,7 +10,7 @@ type Props = {
 const Button = ({ children, setSelectedPage }: Props) => {
     return (
         <AnchorLink
-            className="bg-[#fbbb5b] hover:bg-orange-400 text-black font-semibold py-2 px-4 rounded-full shadow-md"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow-md"
             onClick={() => setSelectedPage(SelectedPage.Community)}
             href={`#${SelectedPage.Community}`}
         >
