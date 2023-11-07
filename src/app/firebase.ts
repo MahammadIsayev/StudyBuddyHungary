@@ -1,18 +1,18 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBH5zfXdzYEYLSSlKkUk8DhchYKfePsybw",
-  authDomain: "study-buddy-hungary.firebaseapp.com",
-  projectId: "study-buddy-hungary",
-  storageBucket: "study-buddy-hungary.appspot.com",
-  messagingSenderId: "204464023423",
-  appId: "1:204464023423:web:2be386d4fd50c710f11c4a",
-  measurementId: "G-VQCS17VNSE"
+  apiKey: "AIzaSyA2vB83NAjrcgOhtndNQ8BiFAVjieCXuEY",
+  authDomain: "study-buddy-hungary-9cfff.firebaseapp.com",
+  projectId: "study-buddy-hungary-9cfff",
+  storageBucket: "study-buddy-hungary-9cfff.appspot.com",
+  messagingSenderId: "756536935090",
+  appId: "1:756536935090:web:e13722ec6ef5c705fa3fab",
+  measurementId: "G-N27RB090DM"
 };
 
 // Initialize Firebase

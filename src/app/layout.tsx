@@ -1,5 +1,4 @@
 import './globals.css'
-import SessionProvider from './SessionProvider';
 
 
 export default async function RootLayout({
@@ -10,9 +9,9 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="h-full">
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+
+        {children}
+
       </body>
     </html>
   )

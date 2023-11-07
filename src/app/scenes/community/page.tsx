@@ -22,15 +22,20 @@ const Community = ({ setSelectedPage }: Props) => {
     useEffect(() => {
         // Fetch user data from Firestore when the component mounts
         const fetchUsers = async () => {
-            const usersCollection = collection(db, 'users'); // 'users' should match your Firestore collection name
-            const usersSnapshot = await getDocs(usersCollection);
+            try {
+                const usersCollection = collection(db, 'users');
+                const usersSnapshot = await getDocs(usersCollection);
 
-            const userData: User[] = [];
-            usersSnapshot.forEach((doc) => {
-                userData.push({ id: doc.id, ...doc.data() } as User);
-            });
+                const userData: User[] = [];
+                usersSnapshot.forEach((doc) => {
+                    userData.push({ id: doc.id, ...doc.data() } as User);
+                });
 
-            setUsers(userData);
+                setUsers(userData);
+                // console.log(userData)
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
         };
 
         fetchUsers();
@@ -49,6 +54,7 @@ const Community = ({ setSelectedPage }: Props) => {
                                     <h3 className='text-xl font-semibold text-black'>{user.fullName}</h3>
                                     <p className='text-sm text-gray-600'>University: {user.university}</p>
                                     <p className='text-sm text-gray-600'>Major: {user.major}</p>
+                                    <p className='text-sm text-gray-600'>Education Level: {user.educationLevel}</p>
                                     <button className='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full mt-4'>
                                         Message
                                     </button>

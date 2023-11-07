@@ -21,7 +21,6 @@
     "firebase": "^9.23.0",
     "framer-motion": "^10.16.4",
     "next": "^13.5.4",
-    "next-auth": "^4.23.2",
     "postcss": "8.4.24",
     "react": "^18.2.0",
     "react-anchor-link-smooth-scroll": "^1.0.12",

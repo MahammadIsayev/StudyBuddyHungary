@@ -1,6 +1,4 @@
 'use client';
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 import Navbar from './scenes/navbar/page';
 import MainHome from './scenes/mainhome/page';
 import Community from './scenes/community/page';
@@ -10,12 +8,6 @@ import { SelectedPage } from './shared/types';
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
   const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
-  const session = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect('/signin');
-    },
-  });
 
   useEffect(() => {
     const scrollFunction = () => {

@@ -1,28 +1,33 @@
-'use client';
-import { signIn } from 'next-auth/react';
+'use client'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Image from 'next/image';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase'; // Import your Firebase auth configuration
+
 
 export default function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing in:', error);
+    }
+  };
+
   return (
     <>
+
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" style={{
         backgroundImage: `url('/assets/mainhome.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
-        //  height: "972px",
       }}>
-        {/* <Image src="/assets/mainhome.png" width={100} height={100} alt="Logo" /> */}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
-          /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
             Sign-in to your account
           </h2>
@@ -73,7 +78,7 @@ export default function Signin() {
 
             <div>
               <button
-                onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/' })}
+                onClick={handleSignIn}
                 disabled={!email || !password}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
@@ -91,5 +96,5 @@ export default function Signin() {
         </div>
       </div>
     </>
-  )
+  );
 }

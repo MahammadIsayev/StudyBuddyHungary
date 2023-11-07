@@ -1,24 +1,28 @@
 'use client';
 import { useState } from 'react';
 import { auth } from '../firebase';
-import { sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail } from 'firebase/auth';
+import Image from 'next/image';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
 
-  const resetEmail = () => {
-    sendPasswordResetEmail(auth, email);
+  const resetEmail = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      // Provide feedback to the user, such as displaying a message that the reset email has been sent.
+      // You can add a state variable to manage this message.
+    } catch (error) {
+      console.error('Error sending reset email:', error);
+      // Handle the error, such as displaying an error message to the user.
+      // You can add a state variable to manage this error message.
+    }
   };
 
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
-          /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
             Forgot Password
           </h2>
@@ -45,7 +49,7 @@ export default function ForgotPassword() {
 
             <div>
               <button
-                onClick={() => resetEmail()}
+                onClick={resetEmail}
                 disabled={!email}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
@@ -56,5 +60,5 @@ export default function ForgotPassword() {
         </div>
       </div>
     </>
-  )
+  );
 }
