@@ -1,8 +1,7 @@
 'use client';
 //Password should be at least 6 characters, Firebase: Error (auth/invalid-email)
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { useRouter } from 'next/router';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { auth, db } from '../firebase';
 
@@ -11,16 +10,12 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
 
-  // const signup = () => {
-  //   createUserWithEmailAndPassword(auth, email, password);
-  // };
   const signup = async () => {
     if (password === passwordAgain) {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store additional user data in Firestore
         const userRef = doc(db, 'users', user.uid);
         const userData = {
           fullName: '',
@@ -28,9 +23,10 @@ export default function Signup() {
           major: '',
           city: '',
           educationLevel: '',
+          profilePictureURL: ''
         };
 
-        // Use setDoc to create or update the user's data
+
         await setDoc(userRef, userData);
 
         window.location.href = '/signin';

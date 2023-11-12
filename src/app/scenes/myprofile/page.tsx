@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../modal/page';
 import { User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db, auth } from '../../firebase';
+import { db, auth, ref, storage } from '../../firebase';
+import { getDownloadURL, uploadBytes } from 'firebase/storage';
 
 interface ProfileData {
     fullName: string;
@@ -10,6 +11,7 @@ interface ProfileData {
     major: string;
     city: string;
     educationLevel: string;
+    profilePictureURL: string;
 }
 
 interface Props {
@@ -25,9 +27,10 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
         major: '',
         city: '',
         educationLevel: '',
+        profilePictureURL: ''
     });
     const [isUpdating, setUpdating] = useState(false);
-    console.log("MyProfile component rendering...");
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
     console.log("Updated profile data:", updatedProfileData);
     const user: User | null = auth.currentUser;
 
@@ -77,11 +80,26 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                 updatedFields.educationLevel = updatedProfileData.educationLevel;
             }
 
-            await setDoc(userDocRef, updatedFields, { merge: true });
+            if (profilePicture) {
+                try {
+                    // Upload profile picture to Firebase Storage
+                    const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+                    await uploadBytes(storageRef, profilePicture);
+
+                    // Get the download URL of the uploaded picture
+                    const downloadURL = await getDownloadURL(storageRef);
+
+                    // Update user profile with the image URL in Firestore
+                    await setDoc(userDocRef, { profilePicture: downloadURL }, { merge: true });
+                } catch (error) {
+                    console.error('Error uploading profile picture:', error);
+                }
+            }
+
+            setUpdating(false);
 
             setTimeout(() => {
                 setProfileModalOpen(false);
-                setUpdating(false);
             }, 1100);
 
             setTimeout(() => {
@@ -95,10 +113,25 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
 
 
-
     return (
         <div className="mt-10">
 
+            <div className="mb-8">
+                <label className="block text-sm font-medium text-orange-400 font-semibold">Profile Picture</label>
+                <input
+                    type="file"
+                    onChange={(e) => {
+                        const selectedFile = e.target.files?.[0];
+
+                        if (selectedFile) {
+                            setProfilePicture(selectedFile);
+                        } else {
+                            console.error('No file selected');
+                        }
+                    }}
+                    className="mt-1 p-2 border rounded w-full"
+                />
+            </div>
             <div className="mb-8">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">Full Name</label>
                 <input

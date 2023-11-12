@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
             <div className="fixed inset-0 bg-black opacity-40"></div>
             <div className="relative z-10 bg-white p-4 w-96">
                 <span
-                    className="absolute top-0 right-0 cursor-pointer text-2xl bg-transparent bg-red-500 text-white"
+                    className="absolute top-0 right-0 cursor-pointer text-2xl bg-transparent bg-red-600 text-white"
                     onClick={onClose}
                     style={{ padding: '0.5rem' }}
                 >

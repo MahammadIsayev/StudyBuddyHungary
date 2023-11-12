@@ -19,6 +19,7 @@ interface ProfileData {
     major: string;
     city: string;
     educationLevel: string;
+    profilePictureURL: string;
 }
 
 type Props = {
@@ -39,8 +40,8 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         major: "",
         city: "",
         educationLevel: "",
+        profilePictureURL: ""
     });
-    // const [isUpdating, setUpdating] = useState(false);
 
     const user: User | null = auth.currentUser;
 
