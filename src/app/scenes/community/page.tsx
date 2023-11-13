@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SelectedPage } from '@/app/shared/types';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { universities, cities, educationLevels } from '@/app/shared/options';
+import { collection, getDocs } from 'firebase/firestore';
 import { db, storage } from '../../firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,8 +24,10 @@ type Props = {
 const Community = ({ setSelectedPage }: Props) => {
     const [users, setUsers] = useState<User[]>([]);
     const [visibleUsers, setVisibleUsers] = useState<User[]>([]);
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
+
     const [selectedUniversity, setSelectedUniversity] = useState('');
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedMajor, setSelectedMajor] = useState('');
@@ -82,8 +85,6 @@ const Community = ({ setSelectedPage }: Props) => {
     };
 
     const handleSearch = () => {
-        // Implement your search logic here based on searchQuery, selectedUniversity, selectedCity, selectedMajor, and selectedEducationLevel
-        // You may use Array.filter to filter the users based on the criteria.
         const filteredUsers = users.filter((user) =>
             user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
             && (selectedUniversity ? user.university.toLowerCase() === selectedUniversity.toLowerCase() : true)
@@ -98,15 +99,15 @@ const Community = ({ setSelectedPage }: Props) => {
         <section id='community'>
             <div className='bg-[#fbbb5b]'>
                 <div className='mx-auto min-h-full w-5/6 py-20 mt-24'>
-                    <div className='bg-orange-400 text-white p-4 rounded-xl mt-20'>
+                    <div className='bg-orange-400 text-black p-4 rounded-xl mt-20'>
                         <h2 className='text-2xl font-semibold mb-4'>Community</h2>
 
                         {/* Search Bar */}
                         <div className='mb-4 flex items-center'>
                             <input
                                 type='text'
-                                placeholder='Search by name...'
-                                className='px-3 py-2 border border-gray-300 rounded-md mr-2'
+                                placeholder='Search...'
+                                className='w-96 py-2 border border-gray-300 rounded-md mr-2'
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -119,46 +120,62 @@ const Community = ({ setSelectedPage }: Props) => {
                         </div>
 
                         {/* Filter Options */}
-                        <div className='mb-4 grid grid-cols-2 gap-4'>
-                            <div>
-                                <label className='block text-sm font-medium text-gray-700'>University:</label>
-                                <input
-                                    type='text'
-                                    placeholder='Filter by university...'
-                                    className='px-3 py-2 border border-gray-300 rounded-md'
-                                    value={selectedUniversity}
-                                    onChange={(e) => setSelectedUniversity(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className='block text-sm font-medium text-gray-700'>City:</label>
-                                <input
-                                    type='text'
-                                    placeholder='Filter by city...'
-                                    className='px-3 py-2 border border-gray-300 rounded-md'
+                        <div className='mb-4 flex items-center'>
+                            <div className='mr-6'>
+                                <label className='block text-sm font-medium text-black'>City:</label>
+                                <select
+                                    className='w-80 py-2 border border-gray-300 rounded-md'
                                     value={selectedCity}
                                     onChange={(e) => setSelectedCity(e.target.value)}
-                                />
+                                >
+                                    <option value=''>Select City</option>
+                                    {cities.map((option) => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-                            <div>
-                                <label className='block text-sm font-medium text-gray-700'>Major:</label>
+                            <div className='mr-6'>
+                                <label className='block text-sm font-medium text-black'>University:</label>
+                                <select
+                                    className='w-80 py-2 border border-gray-300 rounded-md'
+                                    value={selectedUniversity}
+                                    onChange={(e) => setSelectedUniversity(e.target.value)}
+                                >
+                                    <option value=''>Select University</option>
+                                    {universities.map((option) => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className='mr-6'>
+                                <label className='block text-sm font-medium text-black'>Major:</label>
                                 <input
                                     type='text'
                                     placeholder='Filter by major...'
-                                    className='px-3 py-2 border border-gray-300 rounded-md'
+                                    className='w-80 py-2 border border-gray-300 rounded-md'
                                     value={selectedMajor}
                                     onChange={(e) => setSelectedMajor(e.target.value)}
                                 />
                             </div>
                             <div>
-                                <label className='block text-sm font-medium text-gray-700'>Education Level:</label>
-                                <input
-                                    type='text'
-                                    placeholder='Filter by education level...'
-                                    className='px-3 py-2 border border-gray-300 rounded-md'
+                                <label className='block text-sm font-medium text-black'>Education Level:</label>
+                                <select
+                                    className='w-80 py-2 border border-gray-300 rounded-md'
                                     value={selectedEducationLevel}
                                     onChange={(e) => setSelectedEducationLevel(e.target.value)}
-                                />
+                                >
+                                    <option value=''>Select Education Level</option>
+                                    {educationLevels.map((option) => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
