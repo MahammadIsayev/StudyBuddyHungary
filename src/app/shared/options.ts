@@ -119,4 +119,4 @@ export const cities = [
     "Nagytarcsa",
     "Vácduka",
 ];
-export const educationLevels = ["Bachelor's Degree", "Master's Degree", "PhD"];
+export const educationLevels = ["Bachelors", "Masters", "PhD"];

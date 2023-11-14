@@ -31,7 +31,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
     });
     const [isUpdating, setUpdating] = useState(false);
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
-    console.log("Updated profile data:", updatedProfileData);
+    // console.log("Updated profile data:", updatedProfileData);
     const user: User | null = auth.currentUser;
 
     const fetchUserProfile = async () => {
@@ -40,7 +40,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
                 const userData = userDoc.data() as ProfileData;
-                console.log("User data retrieved:", userData);
+                // console.log("User data retrieved:", userData);
                 setUpdatedProfileData(userData);
             }
 
@@ -49,7 +49,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
     useEffect(() => {
         if (isProfileModalOpen && user) {
-            console.log("Fetching user profile data when modal is open.");
+            // console.log("Fetching user profile data when modal is open.");
             fetchUserProfile();
         }
     }, [isProfileModalOpen, user]);
@@ -91,6 +91,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
                     // Update user profile with the image URL in Firestore
                     await setDoc(userDocRef, { profilePicture: downloadURL }, { merge: true });
+
                 } catch (error) {
                     console.error('Error uploading profile picture:', error);
                 }

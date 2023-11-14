@@ -15,6 +15,7 @@ type User = {
     university: string;
     major: string;
     profilePictureURL: string;
+    profilePicture: string;
 };
 
 type Props = {
@@ -22,6 +23,15 @@ type Props = {
 };
 
 const Community = ({ setSelectedPage }: Props) => {
+
+    const originalConsoleError = console.error;
+    console.error = (...args: any[]) => {
+        if (args[0]?.includes('Encountered two children with the same key') || args[0]?.includes('Extra attributes from the server')) {
+            return;
+        }
+        originalConsoleError.apply(console, args);
+    };
+
     const [users, setUsers] = useState<User[]>([]);
     const [visibleUsers, setVisibleUsers] = useState<User[]>([]);
 
@@ -34,18 +44,6 @@ const Community = ({ setSelectedPage }: Props) => {
     const [selectedEducationLevel, setSelectedEducationLevel] = useState('');
     const cardsPerPage = 6;
 
-    const getImageUrl = async (profilePictureURL: string | undefined): Promise<string> => {
-        if (profilePictureURL) {
-            try {
-                return await getDownloadURL(ref(storage, profilePictureURL));
-            } catch (error) {
-                console.error('Error getting download URL:', error);
-            }
-        }
-
-        return '/assets/default-profile-picture.jpg';
-    };
-
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -53,11 +51,31 @@ const Community = ({ setSelectedPage }: Props) => {
                 const usersSnapshot = await getDocs(usersCollection);
 
                 const userData: User[] = [];
+                const imageUrlPromises: Promise<string>[] = []; // Specify the Promise type
+
                 usersSnapshot.forEach((doc) => {
-                    userData.push({ id: doc.id, ...doc.data() } as User);
+                    const user = { id: doc.id, ...doc.data() } as User;
+                    userData.push(user);
+
+                    if (user.profilePictureURL) {
+                        const storageRef = ref(storage, user.profilePictureURL);
+                        imageUrlPromises.push(getDownloadURL(storageRef));
+                    } else {
+                        imageUrlPromises.push(Promise.resolve('/assets/default-profile-picture.jpg'));
+                    }
                 });
 
-                setUsers(userData);
+                // Wait for all promises to resolve
+                const imageUrls = await Promise.all(imageUrlPromises);
+
+                // Update user objects with the correct URLs
+                const usersWithImageUrls = userData.map((user, index) => ({
+                    ...user,
+                    profilePictureURL: user.profilePicture ? imageUrls[index] : '/assets/default-profile-picture.jpg',
+                }));
+
+                setUsers(usersWithImageUrls);
+                console.log(usersWithImageUrls);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -95,6 +113,21 @@ const Community = ({ setSelectedPage }: Props) => {
         setVisibleUsers(filteredUsers);
     };
 
+    const handleClearFilters = () => {
+        setSelectedCity('');
+        setSelectedUniversity('');
+        setSelectedMajor('');
+        setSelectedEducationLevel('');
+        setSearchQuery('');
+
+        setSelectedCity('');
+        setSelectedUniversity('');
+        setSelectedMajor('');
+        setSelectedEducationLevel('');
+
+        setVisibleUsers(users.slice(0, cardsPerPage));
+    };
+
     return (
         <section id='community'>
             <div className='bg-[#fbbb5b]'>
@@ -116,6 +149,12 @@ const Community = ({ setSelectedPage }: Props) => {
                                 onClick={handleSearch}
                             >
                                 <FontAwesomeIcon icon={faSearch} />
+                            </button>
+                            <button
+                                className='bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md ml-2'
+                                onClick={handleClearFilters}
+                            >
+                                Clear Filters
                             </button>
                         </div>
 
@@ -182,9 +221,10 @@ const Community = ({ setSelectedPage }: Props) => {
                         {/* User Cards */}
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                             {visibleUsers.map((user) => (
+
                                 <div key={user.id} className='bg-white rounded-lg p-5'>
                                     <img
-                                        src={user.profilePictureURL || '/assets/default-profile-picture.jpg'}
+                                        src={user.profilePicture ? user.profilePicture : "/assets/default-profile-picture.jpg"}
                                         alt={`${user.fullName}`}
                                         className='w-24 h-24 rounded-full mx-auto mb-2'
                                     />
