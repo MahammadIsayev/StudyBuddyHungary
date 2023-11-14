@@ -24,14 +24,6 @@ type Props = {
 
 const Community = ({ setSelectedPage }: Props) => {
 
-    const originalConsoleError = console.error;
-    console.error = (...args: any[]) => {
-        if (args[0]?.includes('Encountered two children with the same key') || args[0]?.includes('Extra attributes from the server')) {
-            return;
-        }
-        originalConsoleError.apply(console, args);
-    };
-
     const [users, setUsers] = useState<User[]>([]);
     const [visibleUsers, setVisibleUsers] = useState<User[]>([]);
 
