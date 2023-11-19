@@ -34,6 +34,7 @@ const Community = ({ setSelectedPage }: Props) => {
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedMajor, setSelectedMajor] = useState('');
     const [selectedEducationLevel, setSelectedEducationLevel] = useState('');
+
     const cardsPerPage = 6;
 
     useEffect(() => {
@@ -120,12 +121,13 @@ const Community = ({ setSelectedPage }: Props) => {
         setVisibleUsers(users.slice(0, cardsPerPage));
     };
 
+
     return (
         <section id='community'>
             <div className='bg-[#fbbb5b]'>
                 <div className='mx-auto min-h-full w-5/6 py-20 mt-24'>
                     <div className='bg-orange-400 text-black p-4 rounded-xl mt-20'>
-                        <h2 className='text-2xl font-semibold mb-4'>Community</h2>
+                        <h2 className='text-3xl font-semibold mb-4'>Community</h2>
 
                         {/* Search Bar */}
                         <div className='mb-4 flex items-center'>

@@ -64,21 +64,12 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
             const userDocRef = doc(db, 'users', user.uid);
             const updatedFields: Partial<ProfileData> = {};
 
-            if (updatedProfileData.fullName !== '') {
-                updatedFields.fullName = updatedProfileData.fullName;
-            }
-            if (updatedProfileData.university !== '') {
-                updatedFields.university = updatedProfileData.university;
-            }
-            if (updatedProfileData.major !== '') {
-                updatedFields.major = updatedProfileData.major;
-            }
-            if (updatedProfileData.city !== '') {
-                updatedFields.city = updatedProfileData.city;
-            }
-            if (updatedProfileData.educationLevel !== '') {
-                updatedFields.educationLevel = updatedProfileData.educationLevel;
-            }
+            // Always include fields, even if they are empty
+            updatedFields.fullName = updatedProfileData.fullName;
+            updatedFields.university = updatedProfileData.university;
+            updatedFields.major = updatedProfileData.major;
+            updatedFields.city = updatedProfileData.city;
+            updatedFields.educationLevel = updatedProfileData.educationLevel;
 
             if (profilePicture) {
                 try {
@@ -90,12 +81,14 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     const downloadURL = await getDownloadURL(storageRef);
 
                     // Update user profile with the image URL in Firestore
-                    await setDoc(userDocRef, { profilePicture: downloadURL }, { merge: true });
-
+                    updatedFields.profilePictureURL = downloadURL;
                 } catch (error) {
                     console.error('Error uploading profile picture:', error);
                 }
             }
+
+            // Update user profile with the new fields in Firestore
+            await setDoc(userDocRef, updatedFields, { merge: true });
 
             setUpdating(false);
 

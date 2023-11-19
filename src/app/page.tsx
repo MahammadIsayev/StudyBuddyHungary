@@ -4,6 +4,8 @@ import MainHome from './scenes/mainhome/page';
 import Community from './scenes/community/page';
 import { useEffect, useState } from 'react';
 import { SelectedPage } from './shared/types';
+import Forum from './scenes/forum/page';
+import MessagesUI from '../../pages/messagesui';
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
@@ -22,13 +24,14 @@ export default function Home() {
     return () => { window.removeEventListener("scroll", scrollFunction) }
   }, []);
 
-
   return (
     <div>
       <div className='bg-gray-20'>
         <Navbar isTopOfPage={isTopOfPage} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-        <MainHome setSelectedPage={setSelectedPage}/>
-        <Community setSelectedPage={setSelectedPage}/>
+        <MainHome setSelectedPage={setSelectedPage} />
+        <Community setSelectedPage={setSelectedPage} />
+        <Forum setSelectedPage={setSelectedPage} />
+        {/* <MessagesUI /> */}
       </div>
     </div>
   )

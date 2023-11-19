@@ -7,11 +7,11 @@ import Modal from "../modal/page";
 import {
     doc,
     getDoc,
-    setDoc,
 } from "firebase/firestore";
 import { User } from 'firebase/auth';
 import { db, auth } from "../../firebase"
 import MyProfile from "../myprofile/page";
+import Forum from "../forum/page";
 
 interface ProfileData {
     fullName: string;
@@ -80,7 +80,10 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 <Link page="Home" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
                                 <Link page="Community" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
                                 <Link page="Forum" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-                                <Link page="Messages" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
+                                <button type="button" onClick={() => window.open('/messagesui', '_blank')}>
+                                    Messages
+                                </button>
+                                {/* <Link page="Messages" selectedPage={selectedPage} setSelectedPage={openMessagesPage} /> */}
                             </div>
                             <div className="text-lg gap-8 flex items-center justify-between">
                                 <button onClick={() => setProfileModalOpen(true)}>My Profile</button>

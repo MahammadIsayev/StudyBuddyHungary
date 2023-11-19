@@ -28,6 +28,9 @@ export default function Signup() {
 
 
         await setDoc(userRef, userData);
+        await setDoc(doc(db, "userChats", user.uid), {});
+
+        // localStorage.setItem('currentUser', JSON.stringify(userData));
 
         window.location.href = '/signin';
 
