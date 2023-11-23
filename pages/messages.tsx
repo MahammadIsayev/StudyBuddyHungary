@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from "./messages.module.css"
-import Message from './message'
+import Message from './Message'
 
 type Props = {}
 
