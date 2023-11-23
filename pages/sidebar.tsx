@@ -11,7 +11,7 @@ const Sidebar = (props: Props) => {
         <div className={styles.sidebar}>
             <Navbar />
             <Search />
-            {/* <Chats /> */}
+            <Chats />
         </div>
     )
 }

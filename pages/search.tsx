@@ -87,22 +87,27 @@ const Search = (props: Props) => {
                     // Creating user chats
                     console.log('Updating userChats for current user...');
                     await updateDoc(doc(db, 'userChats', currentUser.uid), {
-                        [combinedID + '.userInfo']: {
-                            uid: selectedUserUid,
-                            fullName: selectedUser?.fullName,
-                            photoURL: selectedUser?.profilePictureURL,
+                        [combinedID]: {
+                            chatId: combinedID,
+                            userInfo: {
+                                uid: selectedUserUid,
+                                fullName: selectedUser?.fullName,
+                                photoURL: selectedUser?.profilePictureURL,
+                            },
+                            date: serverTimestamp(),
                         },
-                        [combinedID + 'date']: serverTimestamp(),
                     });
 
-                    console.log('Updating userChats for selected user...');
                     await updateDoc(doc(db, 'userChats', selectedUserUid), {
-                        [combinedID + '.userInfo']: {
-                            uid: currentUser.uid,
-                            fullName: currentUserDetails?.fullName,
-                            photoURL: currentUserDetails?.profilePictureURL,
+                        [combinedID]: {
+                            chatId: combinedID,
+                            userInfo: {
+                                uid: currentUser.uid,
+                                fullName: currentUserDetails?.fullName,
+                                photoURL: currentUserDetails?.profilePictureURL,
+                            },
+                            date: serverTimestamp(),
                         },
-                        [combinedID + 'date']: serverTimestamp(),
                     });
 
                     console.log('Chat created successfully!');
@@ -113,7 +118,8 @@ const Search = (props: Props) => {
                 console.error('Error handling selection:', error);
             }
         }
-        setSearchQuery("")
+        // setSearchQuery("")
+        // setSearchResults([""])
     };
 
     return (
