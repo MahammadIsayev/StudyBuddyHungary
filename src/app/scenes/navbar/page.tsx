@@ -76,7 +76,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                         <Image src="/assets/Logo.png" alt="Logo" width={140} height={100} />
 
                         <div className="w-full flex items-center justify-between">
-                            <div className="text-lg gap-8 flex items-center justify-between">
+                            <div className="text-md gap-8 flex items-center justify-between">
                                 <Link page="Home" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
                                 <Link page="Community" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
                                 <Link page="Forum" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
@@ -85,7 +85,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 </button>
                                 {/* <Link page="Messages" selectedPage={selectedPage} setSelectedPage={openMessagesPage} /> */}
                             </div>
-                            <div className="text-lg gap-8 flex items-center justify-between">
+                            <div className="text-md gap-8 flex items-center justify-between">
                                 <button onClick={() => setProfileModalOpen(true)}>My Profile</button>
                                 <button onClick={() => signingOut()}>Logout</button>
                             </div>

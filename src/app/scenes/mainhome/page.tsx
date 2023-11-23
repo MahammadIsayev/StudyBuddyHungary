@@ -35,7 +35,7 @@ const MainHome = ({ setSelectedPage }: Props) => {
                 visible: { opacity: 1, x: 0 },
               }}
             >
-              <p className="mt-16 mx-4 text-lg">
+              <p className="mt-16 mx-4 text-md">
                 Excel with students from universities across Hungary, no matter where you are. Explore our vibrant community, join study groups, participate in discussions,
                 and start meaningful conversations with like-minded peers from various cities and universities.
               </p>
@@ -98,7 +98,7 @@ const MainHome = ({ setSelectedPage }: Props) => {
                 {/* Icon 1 */}
                 <BiWorld size={77} />
               </div>
-              <p className="text-lg">
+              <p className="text-md">
                 Connect with students from universities across Hungary.
               </p>
             </div>
@@ -109,26 +109,26 @@ const MainHome = ({ setSelectedPage }: Props) => {
                 {/* Icon 2 */}
                 <MdSchool size={77} />
               </div>
-              <p className="text-lg">Join or create study groups to excel in your courses.</p>
+              <p className="text-md">Join or create study groups to excel in your courses.</p>
             </div>
 
 
 
             {/* Benefit 3 */}
             <div className="flex flex-col items-center space-y-6">
-              <div className="text-lg text-orange-400">
+              <div className="text-md text-orange-400">
                 {/* Icon 3 */}
                 <PiBooksFill size={77} />
               </div>
-              <p className="text-lg"> Engage in discussions and share academic resources.</p>
+              <p className="text-md"> Engage in discussions and share academic resources.</p>
             </div>
             {/* Benefit 4 */}
             <div className="flex flex-col items-center space-y-6">
-              <div className="text-lg text-orange-400">
+              <div className="text-md text-orange-400">
                 {/* Icon 4 */}
                 <FaComments size={77} />
               </div>
-              <p className="text-lg">Find like-minded peers from various cities and universities.</p>
+              <p className="text-md">Find like-minded peers from various cities and universities.</p>
             </div>
 
           </div>

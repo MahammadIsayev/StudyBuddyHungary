@@ -6,9 +6,9 @@ import { doc, getDoc } from 'firebase/firestore';
 type Props = {};
 
 const Navbar = (props: Props) => {
-    const [userProfile, setUserProfile] = useState<{ fullName: string | null, profilePicture: string | null }>({
+    const [userProfile, setUserProfile] = useState<{ fullName: string | null, profilePictureURL: string | null }>({
         fullName: null,
-        profilePicture: null,
+        profilePictureURL: null,
     });
 
     useEffect(() => {
@@ -23,31 +23,31 @@ const Navbar = (props: Props) => {
                     const firestoreProfile = userDocSnapshot.data();
                     setUserProfile({
                         fullName: firestoreProfile?.fullName || null,
-                        profilePicture: firestoreProfile?.profilePicture || user.photoURL || null,
+                        profilePictureURL: firestoreProfile?.profilePictureURL || user.photoURL || null,
                     });
                 } else {
                     // Fallback to Firebase Authentication displayName
                     setUserProfile({
                         fullName: user.displayName || null,
-                        profilePicture: user.photoURL || null,
+                        profilePictureURL: user.photoURL || null,
                     });
                 }
             } else {
-                setUserProfile({ fullName: null, profilePicture: null });
+                setUserProfile({ fullName: null, profilePictureURL: null });
             }
         });
 
         return () => unsubscribe();
     }, []);
 
-    const { fullName, profilePicture } = userProfile;
+    const { fullName, profilePictureURL } = userProfile;
 
     return (
         <div className={styles.navbar}>
             <span className={styles.logo}>Direct Messages</span>
             <div className={styles.user}>
                 <img
-                    src={profilePicture || "/assets/default-profile-picture.jpg"}
+                    src={profilePictureURL || "/assets/default-profile-picture.jpg"}
                     alt=""
                     className={styles.img}
                 />

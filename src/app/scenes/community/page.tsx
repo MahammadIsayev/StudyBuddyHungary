@@ -15,7 +15,7 @@ type User = {
     university: string;
     major: string;
     profilePictureURL: string;
-    profilePicture: string;
+    // profilePicture: string;
 };
 
 type Props = {
@@ -64,7 +64,7 @@ const Community = ({ setSelectedPage }: Props) => {
                 // Update user objects with the correct URLs
                 const usersWithImageUrls = userData.map((user, index) => ({
                     ...user,
-                    profilePictureURL: user.profilePicture ? imageUrls[index] : '/assets/default-profile-picture.jpg',
+                    profilePictureURL: user.profilePictureURL ? imageUrls[index] : '/assets/default-profile-picture.jpg',
                 }));
 
                 setUsers(usersWithImageUrls);
@@ -127,7 +127,7 @@ const Community = ({ setSelectedPage }: Props) => {
             <div className='bg-[#fbbb5b]'>
                 <div className='mx-auto min-h-full w-5/6 py-20 mt-24'>
                     <div className='bg-orange-400 text-black p-4 rounded-xl mt-20'>
-                        <h2 className='text-3xl font-semibold mb-4'>Community</h2>
+                        <h2 className='text-2xl font-semibold mb-4'>Community</h2>
 
                         {/* Search Bar */}
                         <div className='mb-4 flex items-center'>
@@ -157,7 +157,7 @@ const Community = ({ setSelectedPage }: Props) => {
                             <div className='mr-6'>
                                 <label className='block text-sm font-medium text-black'>City:</label>
                                 <select
-                                    className='w-80 py-2 border border-gray-300 rounded-md'
+                                    className='w-70 py-2 border border-gray-300 rounded-md'
                                     value={selectedCity}
                                     onChange={(e) => setSelectedCity(e.target.value)}
                                 >
@@ -216,13 +216,13 @@ const Community = ({ setSelectedPage }: Props) => {
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                             {visibleUsers.map((user) => (
 
-                                <div key={user.id} className='bg-white rounded-lg p-5'>
+                                <div key={user.id} className='bg-white rounded-lg p-4'>
                                     <img
-                                        src={user.profilePicture ? user.profilePicture : "/assets/default-profile-picture.jpg"}
+                                        src={user.profilePictureURL ? user.profilePictureURL : "/assets/default-profile-picture.jpg"}
                                         alt={`${user.fullName}`}
-                                        className='w-24 h-24 rounded-full mx-auto mb-2'
+                                        className='w-16 h-16 rounded-full mx-auto mb-2'
                                     />
-                                    <h3 className='text-xl font-semibold text-black'>{user.fullName}</h3>
+                                    <h3 className='text-lg font-semibold text-black'>{user.fullName}</h3>
                                     <p className='text-sm text-gray-600'>City: {user.city}</p>
                                     <p className='text-sm text-gray-600'>University: {user.university}</p>
                                     <p className='text-sm text-gray-600'>Major: {user.major}</p>

@@ -18,6 +18,7 @@ export default function Signup() {
 
         const userRef = doc(db, 'users', user.uid);
         const userData = {
+          userID: user.uid,
           fullName: '',
           university: '',
           major: '',
