@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'; // Import your Firebase auth configuration
+import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
 
 
 export default function Signin() {
@@ -20,7 +21,7 @@ export default function Signin() {
   };
 
   return (
-    <>
+    <ChatContextProvider>
 
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" style={{
         backgroundImage: `url('/assets/mainhome.png')`,
@@ -95,6 +96,6 @@ export default function Signin() {
           </p>
         </div>
       </div>
-    </>
+    </ChatContextProvider>
   );
 }

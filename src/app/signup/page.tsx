@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { auth, db } from '../firebase';
+import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -42,7 +43,7 @@ export default function Signup() {
   };
 
   return (
-    <>
+    <ChatContextProvider>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -123,6 +124,6 @@ export default function Signup() {
           </div>
         </div>
       </div>
-    </>
+    </ChatContextProvider>
   )
 }

@@ -21,7 +21,7 @@ const Search = (props: Props) => {
                 if (userDoc.exists()) {
                     const userDetails = userDoc.data();
                     setCurrentUserDetails(userDoc.data());
-                    console.log('Current User Details:', userDetails);
+                    // console.log('Current User Details:', userDetails);
                 }
             }
         };
@@ -64,28 +64,28 @@ const Search = (props: Props) => {
                 return;
             }
 
-            console.log('Selected User:', selectedUser);
-            console.log('Current User:', currentUser);
+            // console.log('Selected User:', selectedUser);
+            // console.log('Current User:', currentUser);
 
             const combinedID =
                 currentUser.uid > selectedUserUid
                     ? currentUser.uid + selectedUserUid
                     : selectedUserUid + currentUser.uid;
 
-            console.log('Combined ID:', combinedID);
+            // console.log('Combined ID:', combinedID);
 
             try {
                 const chatDocRef = doc(db, 'chats', combinedID);
                 const chatDoc = await getDoc(chatDocRef);
 
-                console.log('Existing Chat Doc:', chatDoc.data()); // Log the existing chat document
+                // console.log('Existing Chat Doc:', chatDoc.data()); 
 
                 if (!chatDoc.exists()) {
                     // Creating a chat in "chats" collection
                     await setDoc(chatDocRef, { messages: [] });
 
                     // Creating user chats
-                    console.log('Updating userChats for current user...');
+                    // console.log('Updating userChats for current user...');
                     await updateDoc(doc(db, 'userChats', currentUser.uid), {
                         [combinedID]: {
                             chatId: combinedID,
@@ -118,8 +118,7 @@ const Search = (props: Props) => {
                 console.error('Error handling selection:', error);
             }
         }
-        // setSearchQuery("")
-        // setSearchResults([""])
+
     };
 
     return (
@@ -128,7 +127,7 @@ const Search = (props: Props) => {
                 <input
                     className={styles.searchmessageuser}
                     type="text"
-                    placeholder="Find a user..."
+                    placeholder="Find a user... (press Enter)"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyPress}

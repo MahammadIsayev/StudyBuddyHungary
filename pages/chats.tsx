@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
-import styles from "./messages.module.css"
-import { doc, onSnapshot } from 'firebase/firestore'
+import React, { useContext, useEffect, useState } from 'react';
+import styles from './messages.module.css';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { auth, db } from '../src/app/firebase';
-import { User } from 'firebase/auth';
-// import { ChatContext, ChatContextProvider } from './context/ChatContext';
+import { ChatContext } from './context/ChatContextProvider';
+import { useUser } from './context/AuthProvider';
 
 interface ChatData {
     chatId: string;
-    date: { seconds: number, nanoseconds: number };
+    date: { seconds: number; nanoseconds: number };
     userInfo: {
         uid: string;
         photoURL: string;
@@ -18,16 +18,30 @@ interface ChatData {
     };
 }
 
-const Chats = () => {
-    const currentUser: User | null = auth.currentUser;
-    // const { dispatch } = useContext(ChatContext)
+const Chats: React.FC = () => {
+    const currentUser = useUser();
+    // console.log("Current User:", currentUser);
     const [chats, setChats] = useState<Record<string, ChatData>>({});
+    const { dispatch } = useContext(ChatContext);
+
+
 
     useEffect(() => {
+        // console.log("Effect is running");
         const getChats = () => {
             if (currentUser) {
-                const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-                    setChats(doc.data() as Record<string, ChatData> || {});
+                const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
+                    try {
+                        const data = doc.data();
+                        if (data && Object.keys(data).length > 0) {
+                            // console.log("Chats document data:", data);
+                            setChats(data);
+                        } else {
+                            console.log("No chats found for the current user yet.");
+                        }
+                    } catch (error) {
+                        console.error("Error fetching chats:", error);
+                    }
                 });
 
                 return () => {
@@ -41,25 +55,33 @@ const Chats = () => {
         }
     }, [currentUser?.uid]);
 
-    console.log(chats);
 
-    // const handleSelect = (u: any) => {
-    //     dispatch({ type: "CHANGE_USER", payload: u })
-    // }
+    const handleSelect = (userInfo: ChatData['userInfo']) => {
+        dispatch({ type: 'CHANGE_USER', payload: userInfo });
+    };
+
 
     return (
         <div className={styles.chats}>
-            {Object.entries(chats)?.map(([chatId, chatData]) => (
-                <div key={chatId} className={styles.userChat}>
-                    <img src={chatData.userInfo.photoURL} alt="" className={styles.userImage} />
-                    <div className={styles.userChatInfo}>
-                        <span className={styles.userName}>{chatData.userInfo.fullName}</span>
-                        {/* <p className={styles.defaultText}>{chatData.lastMessage?.text}</p> */}
+            {Object.entries(chats)?.length > 0 ? (
+                Object.entries(chats)?.sort((a, b) => a[1].date.seconds - b[1].date.seconds).map(([chatId, chatData]) => (
+                    <div
+                        key={chatId}
+                        className={styles.userChat}
+                        onClick={() => handleSelect(chatData.userInfo)}
+                    >
+                        <img src={chatData.userInfo.photoURL} alt="" className={styles.userImage} />
+                        <div className={styles.userChatInfo}>
+                            <span className={styles.userName}>{chatData.userInfo.fullName}</span>
+                            <p className={styles.defaultText}>{chatData.lastMessage?.text}</p>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p>No chats yet. Start chatting with someone!</p>
+            )}
         </div>
     );
-}
+};
 
 export default Chats;

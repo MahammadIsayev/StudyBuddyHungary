@@ -5,7 +5,6 @@ import Community from './scenes/community/page';
 import { useEffect, useState } from 'react';
 import { SelectedPage } from './shared/types';
 import Forum from './scenes/forum/page';
-// import MessagesUI from '../../pages/messagesui';
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);

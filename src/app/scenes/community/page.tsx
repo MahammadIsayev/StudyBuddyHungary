@@ -58,7 +58,7 @@ const Community = ({ setSelectedPage }: Props) => {
                     }
                 });
 
-                // Wait for all promises to resolve
+                // all promises to resolve
                 const imageUrls = await Promise.all(imageUrlPromises);
 
                 // Update user objects with the correct URLs
@@ -68,7 +68,7 @@ const Community = ({ setSelectedPage }: Props) => {
                 }));
 
                 setUsers(usersWithImageUrls);
-                console.log(usersWithImageUrls);
+                // console.log(usersWithImageUrls);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }

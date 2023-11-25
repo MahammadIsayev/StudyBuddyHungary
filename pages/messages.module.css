@@ -306,7 +306,7 @@
             }
           }
 
-          .owner {
+          &.owner {
             flex-direction: row-reverse;
 
             .messageContent {

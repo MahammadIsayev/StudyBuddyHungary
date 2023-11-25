@@ -1,20 +1,24 @@
-import React from 'react'
-import styles from "./messages.module.css"
-import Messages from './Messages'
-import Input from './Input'
+import React, { useContext } from 'react';
+import styles from './messages.module.css';
+import Messages from './messages';
+import Input from './input';
+import { ChatContext } from './context/ChatContextProvider';
 
-type Props = {}
+const Chat: React.FC = () => {
+    const { data } = useContext(ChatContext);
+    // console.log('User Data:', data.user);
 
-const Chat = (props: Props) => {
+    const fullName = data.user?.fullName || '';
+
     return (
         <div className={styles.chat}>
             <div className={styles.chatInfo}>
-                <span>Rauf</span>
+                <span>{fullName}</span>
             </div>
             <Messages />
             <Input />
         </div>
-    )
-}
+    );
+};
 
-export default Chat
+export default Chat;

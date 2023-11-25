@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../modal/page';
 import { User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth, ref, storage } from '../../firebase';
