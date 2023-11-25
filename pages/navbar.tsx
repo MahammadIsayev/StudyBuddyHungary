@@ -44,15 +44,16 @@ const Navbar = (props: Props) => {
 
     return (
         <div className={styles.navbar}>
-            <span className={styles.logo}>Direct Messages</span>
             <div className={styles.user}>
                 <img
                     src={profilePictureURL || "/assets/default-profile-picture.jpg"}
                     alt=""
                     className={styles.img}
                 />
-                <span>{fullName || 'Anonymous'}</span>
+
             </div>
+            <span className={styles.logo}>Direct Messages</span>
+
         </div>
     );
 };

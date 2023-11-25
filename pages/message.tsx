@@ -16,8 +16,8 @@ const Message = ({ message }: any) => {
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   })
-  console.log(data);
-  console.log(isCurrentUser);
+  // console.log(data);
+  // console.log(isCurrentUser);
 
 
 
@@ -26,7 +26,7 @@ const Message = ({ message }: any) => {
       ref={ref}
       className={classNames(styles.message, {
         [styles.messageOwner]: isCurrentUser,
-        [styles.owner]: isCurrentUser, // Add this line to conditionally apply the 'owner' class
+        [styles.owner]: isCurrentUser,
       })}
     > {/*in css it is "message owner" (conditional css)*/}
       <div className={styles.messageInfo}>
@@ -35,7 +35,7 @@ const Message = ({ message }: any) => {
           alt=""
           style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
         /> */}
-        <span>{messageDate.toLocaleString()}</span>
+        <span className={styles.messageDate}>{messageDate.toLocaleString()}</span>
       </div>
       <div className={styles.messageContent}>
         {message.img && <img src={message.img} alt="" className={styles.userProfPic2} />}
