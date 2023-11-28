@@ -70,7 +70,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
     return (
         <nav>
-            <div className={`fixed top-0 w-full py-2 ${navbarBackground} flex items-center justify-between z-30`}>
+            <div className={`fixed top-0 w-full ${navbarBackground} flex items-center justify-between z-30`}>
                 <div className="w-5/6 mx-auto flex items-center justify-between">
                     <div className="w-full gap-16 flex items-center justify-between">
                         <Image src="/assets/Logo.png" alt="Logo" width={140} height={100} />

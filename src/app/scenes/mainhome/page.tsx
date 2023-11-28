@@ -36,8 +36,10 @@ const MainHome = ({ setSelectedPage }: Props) => {
               }}
             >
               <p className="mt-16 mx-4 text-md">
-                Excel with students from universities across Hungary, no matter where you are. Explore our vibrant community, join study groups, participate in discussions,
-                and start meaningful conversations with like-minded peers from various cities and universities.
+                Discover our diverse community of students from universities all over Hungary,
+                regardless of your location. Immerse yourself in our lively environment, engage in study groups,
+                contribute to discussions, and initiate meaningful dialogues with fellow students who share common interests,
+                irrespective of the cities and universities they belong to.
               </p>
             </motion.div>
 

@@ -220,7 +220,7 @@ const Community = ({ setSelectedPage }: Props) => {
                                     <img
                                         src={user.profilePictureURL ? user.profilePictureURL : "/assets/default-profile-picture.jpg"}
                                         alt={`${user.fullName}`}
-                                        className='w-16 h-16 rounded-full mx-auto mb-2'
+                                        className='w-24 h-24 rounded-full mx-auto mb-2'
                                     />
                                     <h3 className='text-lg font-semibold text-black'>{user.fullName}</h3>
                                     <p className='text-sm text-gray-600'>City: {user.city}</p>

@@ -18,7 +18,7 @@
 /* .sidebar */
 .sidebar {
   flex: 1;
-  background-color: #fbbb5b;
+  background: linear-gradient(135deg, #3d7ed6, #fbbb5b);
   position: relative;
   overflow: auto;
   height: 100%;
@@ -43,16 +43,18 @@
 .navbar {
   display: flex;
   align-items: center;
-  background-color: #ed7904;
+  background: linear-gradient(135deg, #3498db, #2980b9);
   height: 50px;
   padding: 10px;
   justify-content: space-between;
   color: #ddddf7;
+  margin-bottom: 10px;
 }
 
 /* .logo (inside .navbar) */
 .navbar .logo {
-  font-weight: bold;
+  font-weight: normal;
+  font-size: 18px;
 }
 
 /* .user (inside .navbar) */
@@ -62,31 +64,75 @@
   align-items: center;
 }
 
+/* .navbarFullName */
+.navbarFullName {
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+  margin-left: 15px;
+}
+
 /* .img (inside .user) */
 .user .img {
   background-color: #ddddf7;
-  height: 36px;
-  width: 36px;
+  height: 48px;
+  width: 48px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 /* .search */
 .search {
-  border-bottom: 1px solid gray;
+  display: flex;
+  align-items: center;
 }
 
 /* .searchForm */
 .searchForm {
   padding: 10px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin-left: 13px;
+  cursor: text;
 }
 
 /* .searchmessageuser */
 .searchmessageuser {
   background-color: transparent;
   border: none;
-  color: white;
+  color: #333;
   outline: none;
+  cursor: text;
+  width: 100%;
+  padding: 3px;
+}
+
+.searchForm:hover {
+  background-color: #e0e0e0;
+}
+
+.searchmessageuser:focus {
+  background-color: #ffffff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* .searchIcon */
+.searchIcon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 0 20px 20px 0;
+  background-color: #f2f2f2;
+}
+
+/* SVG icon inside .searchIcon */
+.searchIcon svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* .userChat */
@@ -101,8 +147,8 @@
 
 /* .userImage (inside .userChat) */
 .userChat .userImage {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -116,7 +162,7 @@
 /* .userName (inside .userChatInfo) */
 .userChat .userChatInfo .userName {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: normal;
 }
 
 /* .defaultText (inside .userChatInfo) */
@@ -136,20 +182,17 @@
   bottom: 0;
   z-index: 1;
   height: 50px;
-  background-color: #ed7904;
+  background: linear-gradient(135deg, #fbbb5b, #3d7ed6);
   display: flex;
   align-items: center;
   padding: 10px;
   color: lightgray;
 }
 
-.navbarFullName {
-  margin-left: 10px;
-}
-
 /* .messagesBox */
 .messagesBox {
-  background: #FFD580;
+  /* background: #639fba; */
+  background-image: url("/assets/chatbg.webp");
   padding: 10px;
   height: calc(100% - 110px);
   overflow: auto;
@@ -168,23 +211,22 @@
   display: flex;
   flex-direction: column;
   color: gray;
-  font-weight: 300;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
 .messagesBox::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 .messagesBox::-webkit-scrollbar-thumb {
-  background-color: #ff5722;
+  background-color: #fbbb5b;
   border-radius: 3px;
 }
 
 .messagesBox::-webkit-scrollbar-track {
   background-color: transparent;
 }
-
 
 /* .messageDate */
 .message .messageInfo .messageDate {
@@ -224,7 +266,7 @@
 
 /* .owner .paragraph */
 .message.owner .paragraph {
-  background-color: #5d5b8d;
+  background-color: rgb(29 78 216);
   color: white;
   border-radius: 10px 0px 10px 10px;
 }

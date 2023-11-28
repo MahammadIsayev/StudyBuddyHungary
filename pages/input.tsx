@@ -79,9 +79,16 @@ const Input = (props: Props) => {
         setImg(null);
     };
 
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    };
+
     return (
         <div className={styles.textInput}>
-            <input type="text" placeholder='Type something...' value={text} className={styles.typeInput} onChange={e => setText(e.target.value)} />
+            <input type="text" placeholder='Type something...' value={text} className={styles.typeInput} onChange={e => setText(e.target.value)} onKeyDown={handleKeyPress} />
             <div className={styles.send}>
                 <img src="/assets/attach.png" alt="" className={styles.sendImage} />
                 <input type="file" style={{ display: 'none' }} id='file' onChange={e => setImg(e.target.files?.[0] || null)} />
