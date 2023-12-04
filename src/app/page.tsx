@@ -5,6 +5,8 @@ import Community from './scenes/community/page';
 import { useEffect, useState } from 'react';
 import { SelectedPage } from './shared/types';
 import Forum from './scenes/forum/page';
+import { AuthProvider } from '../../pages/context/AuthProvider';
+import { ChatContextProvider } from '../../pages/context/ChatContextProvider';
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
@@ -24,15 +26,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <div className='bg-gray-20'>
-        <Navbar isTopOfPage={isTopOfPage} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-        <MainHome setSelectedPage={setSelectedPage} />
-        <Community setSelectedPage={setSelectedPage} />
-        <Forum setSelectedPage={setSelectedPage} />
-        {/* <MessagesUI /> */}
-      </div>
-    </div>
+    <AuthProvider>
+      <ChatContextProvider>
+        <div>
+          <div className='bg-gray-20'>
+            <Navbar isTopOfPage={isTopOfPage} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
+            <MainHome setSelectedPage={setSelectedPage} />
+            <Community setSelectedPage={setSelectedPage} />
+            <Forum setSelectedPage={setSelectedPage} />
+            {/* <MessagesUI /> */}
+          </div>
+        </div>
+      </ChatContextProvider>
+    </AuthProvider>
   )
 }
 
