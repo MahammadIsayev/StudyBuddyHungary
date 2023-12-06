@@ -291,7 +291,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     className="mt-1 p-2 border rounded w-full"
                 />
             </div>
-            <button onClick={handleUpdateProfile} disabled={isUpdating} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded ">
+            <button onClick={handleUpdateProfile} disabled={isUpdating} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded float-right">
                 {isUpdating ? "Updating..." : "Save"}
             </button>
         </div>

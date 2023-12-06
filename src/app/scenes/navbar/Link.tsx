@@ -13,10 +13,9 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
 
   return (
     <ScrollLink
-      activeClass="border-b-2 border-primary-900"
-      className={`text-base transition duration-500 hover:text-primary-300 cursor-pointer ${
-        selectedPage === lowerCasePage ? "text-primary-900" : ""
-      }`}
+      activeClass="border-b-2 border-orange-700"
+      className={`text-base transition duration-500 hover:text-primary-300 cursor-pointer ${selectedPage === lowerCasePage ? "text-primary-900" : ""
+        }`}
       to={lowerCasePage}
       spy={true}
       smooth={true}

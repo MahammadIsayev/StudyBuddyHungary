@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { X } from 'react-bootstrap-icons';
 
 type InstructionsModalProps = {
     isOpen: boolean;
@@ -12,27 +13,28 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onRequest
             isOpen={isOpen}
             onRequestClose={onRequestClose}
             contentLabel="Instructions Modal"
-            className="modal" // Optional: You can add a custom class to the modal for additional styling
-            overlayClassName="overlay" // Optional: You can add a custom class to the modal overlay for additional styling
+            className="modal"
+            overlayClassName="overlay"
         >
             <div className="fixed inset-0 flex items-center justify-center z-50">
-                {/* Background overlay */}
+
                 <div className="fixed inset-0 bg-black opacity-40"></div>
 
-                {/* Modal content container */}
+
                 <div className="relative z-10 bg-white p-5 w-120 rounded-md shadow-lg">
                     <button
                         onClick={onRequestClose}
-                        className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                        className="absolute top-0 right-0 cursor-pointer text-2xl bg-transparent bg-red-500 text-white"
+                        style={{ padding: '0.3rem', paddingLeft: '0.4rem' }}
                     >
-                        Close
+                        <X className='bg-red-600 text-white' />
                     </button>
 
-                    {/* Content goes inside a container div */}
+
                     <div className="content-container">
                         <h2 className="text-2xl font-semibold mb-4">Get Started Guide</h2>
 
-                        {/* Steps go inside a container div */}
+
                         <div className="steps-container">
                             <p className="mb-4">
                                 <strong>Step 1: My Profile</strong>

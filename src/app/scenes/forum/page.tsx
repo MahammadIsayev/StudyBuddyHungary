@@ -23,15 +23,12 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [fullName, setFullName] = useState('');
     const [postLists, setPostsList] = useState<Post[]>([]);
 
-    // const titleRef = useRef<HTMLInputElement>(null);
-    // const postTextRef = useRef<HTMLTextAreaElement>(null);
-
     const user: User | null = useUser();
 
     const postCollectionRef = collection(db, 'posts');
 
     useEffect(() => {
-        // Fetch user data when the component mounts
+
         const fetchUserData = async () => {
             try {
                 if (user) {
@@ -78,11 +75,11 @@ const Forum = ({ setSelectedPage }: Props) => {
 
     const createPost = async () => {
         try {
-            // Check if user is authenticated
+            //  if user is authenticated
             if (auth.currentUser) {
                 const authorId = auth.currentUser.uid;
 
-                // Check if fullName is not null before creating the post
+                //  if fullName is not null before creating the post
                 if (fullName !== null) {
                     await addDoc(postCollectionRef, {
                         title,
@@ -106,14 +103,21 @@ const Forum = ({ setSelectedPage }: Props) => {
     };
 
     const deletePost = async (id: string) => {
-        const postDocRef = doc(db, 'posts', id);
-        await deleteDoc(postDocRef)
+        try {
+            const postDocRef = doc(db, 'posts', id);
+            await deleteDoc(postDocRef);
+
+            setPostsList((prevPosts) => prevPosts.filter((post) => post.id !== id));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
     }
 
     return (
         <section id="forum" className="py-8">
-            <div className="bg-white rounded-md shadow-md p-8 max-w-2xl mx-auto mt-24">
-                <h1 className="text-3xl font-semibold mb-6">Create a post</h1>
+            <div className="bg-white rounded-md shadow-md p-20 max-w-2xl mx-auto mt-24">
+                <h1 className="text-3xl font-semibold mb-6">Forum</h1>
+                <h2 className="text-xl font-semibold mb-6">Create a post</h2>
                 <div className="inputGp mb-4">
                     <label className="block text-sm font-medium text-gray-700" htmlFor="title">
                         Title
@@ -121,7 +125,7 @@ const Forum = ({ setSelectedPage }: Props) => {
                     <input
                         id="title"
                         type="text"
-                        placeholder="Title"
+                        placeholder="Enter a descriptive title..."
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         className="mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300"
@@ -133,23 +137,24 @@ const Forum = ({ setSelectedPage }: Props) => {
                     </label>
                     <textarea
                         id="post"
-                        placeholder="Post"
+                        placeholder="Share your thoughts, ask questions, or provide insights..."
                         value={postText}
                         onChange={(e) => setPostText(e.target.value)}
                         className="mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300"
+                        style={{ resize: 'none' }}
                     ></textarea>
                 </div>
                 <button
                     onClick={createPost}
-                    className="bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300"
+                    className="float-right bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 "
                 >
-                    Create Post
+                    Share
                 </button>
             </div>
-            <div className='flex flex-wrap justify-between mt-4 max-w-screen-xl mx-auto'>
-                {postLists.map((post) => (
+            <div className='flex flex-wrap justify-between mt-2 max-w-screen-xl mx-auto'>
+                {postLists.map((post, index) => (
 
-                    <div key={post.id} className="bg-white rounded-md shadow-md p-6 mt-4 w-96">
+                    <div key={post.id} className={`bg-white rounded-md shadow-md p-6 mt-2 w-full`}>
                         <div className="mb-4 flex justify-between items-center">
                             <div className="title">
                                 <h1 className="text-2xl font-semibold">{post.title}</h1>
@@ -163,8 +168,8 @@ const Forum = ({ setSelectedPage }: Props) => {
                         </div>
                         <div className="postTextContainer mb-4">{post.postText}</div>
                         <h3 className="text-blue-500">@{post.fullName}</h3>
-                        <textarea name="" className='mt-2' cols={40} rows={2} placeholder='Add a comment'></textarea>
-                        <button className='bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300'>Comment</button>
+                        <textarea name="" style={{ resize: 'none' }} className='mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300' cols={40} rows={2} placeholder='Add a comment'></textarea>
+                        <button className='bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 float-right mt-3'>Comment</button>
                     </div>
                 ))}
             </div>

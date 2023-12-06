@@ -7,6 +7,7 @@ import { SelectedPage } from './shared/types';
 import Forum from './scenes/forum/page';
 import { AuthProvider } from '../../pages/context/AuthProvider';
 import { ChatContextProvider } from '../../pages/context/ChatContextProvider';
+import Footer from './scenes/footer/page';
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
@@ -35,6 +36,7 @@ export default function Home() {
             <Community setSelectedPage={setSelectedPage} />
             <Forum setSelectedPage={setSelectedPage} />
             {/* <MessagesUI /> */}
+            <Footer />
           </div>
         </div>
       </ChatContextProvider>
