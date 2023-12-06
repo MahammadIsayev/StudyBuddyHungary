@@ -78,7 +78,7 @@ const Chats: React.FC = () => {
                     </div>
                 ))
             ) : (
-                <p>No chats yet. Start chatting with someone!</p>
+                <p className={styles.noChatsText}>No chats yet. Start chatting with someone!</p>
             )}
         </div>
     );

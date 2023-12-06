@@ -319,3 +319,8 @@
 .textInput .send .sendButton:hover {
   background-color: rgb(29 78 216);
 }
+
+/* .noChatsText */
+.noChatsText {
+  margin-left: 17px;
+}

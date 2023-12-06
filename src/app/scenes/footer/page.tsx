@@ -31,7 +31,6 @@ const Footer = () => {
             </div>
             <div className="text-center text-gray-500">
                 <p>&copy; {new Date().getFullYear()} Mahammad Isayev. All rights reserved.</p>
-                <p>Terms of Service | Privacy Policy</p>
             </div>
         </footer>
     );

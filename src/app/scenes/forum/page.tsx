@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Timestamp } from 'firebase/firestore';
 import { SelectedPage } from '@/app/shared/types';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import { User } from 'firebase/auth';
 import { useUser } from '../../../../pages/context/AuthProvider';
@@ -17,15 +18,28 @@ type Post = {
     title: string;
 };
 
+type Comment = {
+    authorId: string;
+    fullName: string;
+    commentText: string;
+    id: string;
+    timestamp: Timestamp;
+};
+
 const Forum = ({ setSelectedPage }: Props) => {
     const [title, setTitle] = useState('');
     const [postText, setPostText] = useState('');
     const [fullName, setFullName] = useState('');
     const [postLists, setPostsList] = useState<Post[]>([]);
+    const [comments, setComments] = useState<{ [postId: string]: Comment[] }>({});
+    const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
+    const [userColors, setUserColors] = useState<{ [userId: string]: string }>({});
+
 
     const user: User | null = useUser();
 
     const postCollectionRef = collection(db, 'posts');
+    const commentCollectionRef = collection(db, 'comments');
 
     useEffect(() => {
 
@@ -73,6 +87,40 @@ const Forum = ({ setSelectedPage }: Props) => {
         getPosts();
     }, [postCollectionRef]);
 
+    useEffect(() => {
+        const getComments = async () => {
+            try {
+                const commentsData: { [postId: string]: Comment[] } = {};
+
+                await Promise.all(postLists.map(async (post) => {
+                    const postComments: Comment[] = [];
+
+                    const commentQuerySnapshot = await getDocs(query(commentCollectionRef, where('postId', '==', post.id)));
+
+                    commentQuerySnapshot.forEach((commentDoc) => {
+                        postComments.push({
+                            id: commentDoc.id,
+                            authorId: commentDoc.data().authorId,
+                            fullName: commentDoc.data().fullName,
+                            commentText: commentDoc.data().commentText,
+                            timestamp: commentDoc.data().timestamp,
+                        });
+                    });
+
+                    commentsData[post.id] = postComments;
+                }));
+
+                setComments(commentsData);
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
+        };
+
+        getComments();
+
+        getComments();
+    }, [commentCollectionRef]);
+
     const createPost = async () => {
         try {
             //  if user is authenticated
@@ -102,6 +150,32 @@ const Forum = ({ setSelectedPage }: Props) => {
         }
     };
 
+    const createComment = async (postId: string) => {
+        try {
+            if (auth.currentUser) {
+                const authorId = auth.currentUser.uid;
+
+                if (fullName !== null) {
+                    await addDoc(commentCollectionRef, {
+                        postId,
+                        authorId,
+                        fullName,
+                        commentText: commentTexts[postId] || '',
+                        timestamp: Timestamp.now()
+                    });
+
+                    setCommentTexts((prev) => ({ ...prev, [postId]: '' }));
+                } else {
+                    console.error('Full name is null!');
+                }
+            } else {
+                console.error('User is not authenticated.');
+            }
+        } catch (error) {
+            console.error('Error creating comment:', error);
+        }
+    };
+
     const deletePost = async (id: string) => {
         try {
             const postDocRef = doc(db, 'posts', id);
@@ -113,9 +187,45 @@ const Forum = ({ setSelectedPage }: Props) => {
         }
     }
 
+    const handleKeyPress = (e: React.KeyboardEvent, postId: string) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            createComment(postId);
+        }
+    };
+
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+
+        // Define the colors to exclude
+        const excludeColors = ['#FFFFFF', '#ECF4FD'];  // Add more colors as needed
+
+        // Generate a new color until a non-excluded color is found
+        do {
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+        } while (excludeColors.includes(color));
+
+        return color;
+    };
+
+    const getColorForUser = (userId: string) => {
+        // Check if the color is already assigned for the user
+        if (userColors[userId]) {
+            return userColors[userId];
+        }
+
+        // If not, generate a random color and store it
+        const newColor = getRandomColor();
+        setUserColors((prevColors) => ({ ...prevColors, [userId]: newColor }));
+        return newColor;
+    };
+
     return (
-        <section id="forum" className="py-8">
-            <div className="bg-white rounded-md shadow-md p-20 max-w-2xl mx-auto mt-24">
+        <section id="forum" className="py-8 bg-blue-50">
+            <div className="bg-white rounded-md shadow-2xl p-20 max-w-2xl mx-auto mt-24">
                 <h1 className="text-3xl font-semibold mb-6">Forum</h1>
                 <h2 className="text-xl font-semibold mb-6">Create a post</h2>
                 <div className="inputGp mb-4">
@@ -152,7 +262,7 @@ const Forum = ({ setSelectedPage }: Props) => {
                 </button>
             </div>
             <div className='flex flex-wrap justify-between mt-2 max-w-screen-xl mx-auto'>
-                {postLists.map((post, index) => (
+                {postLists.map((post) => (
 
                     <div key={post.id} className={`bg-white rounded-md shadow-md p-6 mt-2 w-full`}>
                         <div className="mb-4 flex justify-between items-center">
@@ -168,8 +278,33 @@ const Forum = ({ setSelectedPage }: Props) => {
                         </div>
                         <div className="postTextContainer mb-4">{post.postText}</div>
                         <h3 className="text-blue-500">@{post.fullName}</h3>
-                        <textarea name="" style={{ resize: 'none' }} className='mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300' cols={40} rows={2} placeholder='Add a comment'></textarea>
-                        <button className='bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 float-right mt-3'>Comment</button>
+                        <div className="flex items-center">
+                            <textarea
+                                onChange={(e) => setCommentTexts((prev) => ({ ...prev, [post.id]: e.target.value }))}
+                                onKeyDown={(e) => handleKeyPress(e, post.id)}
+                                value={commentTexts[post.id] || ''}
+                                style={{ resize: 'none' }}
+                                className='mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300 bg-gray-100 text-gray-800'
+                                cols={40}
+                                rows={2}
+                                placeholder='Add a comment'
+                            ></textarea>
+                            <button
+                                onClick={() => createComment(post.id)}
+                                className='bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 ml-2'
+                            >
+                                Comment
+                            </button>
+                        </div>
+                        {/* Display comments */}
+                        {comments[post.id] && comments[post.id]
+                            .sort((a, b) => b.timestamp?.toMillis() - a.timestamp?.toMillis())
+                            .map((comment) => (
+                                <div key={comment.id} className="bg-gray-100 p-2 mt-2 rounded-md">
+                                    <strong style={{ color: getColorForUser(comment.authorId) }}>{comment.fullName}:</strong> {comment.commentText}
+                                    <p className="text-gray-500">{comment.timestamp?.toDate().toLocaleString()}</p>
+                                </div>
+                            ))}
                     </div>
                 ))}
             </div>

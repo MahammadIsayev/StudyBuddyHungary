@@ -227,9 +227,9 @@ const Community = ({ setSelectedPage }: Props) => {
                                     <p className='text-sm text-gray-600'>University: {user.university}</p>
                                     <p className='text-sm text-gray-600'>Major: {user.major}</p>
                                     <p className='text-sm text-gray-600'>Education Level: {user.educationLevel}</p>
-                                    <button className='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full mt-4 float-right'>
+                                    {/* <button className='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full mt-4 float-right'>
                                         Message
-                                    </button>
+                                    </button> */}
                                 </div>
                             ))}
                         </div>
