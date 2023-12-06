@@ -11,7 +11,7 @@ import {
 import { User } from 'firebase/auth';
 import { db, auth } from "../../firebase"
 import MyProfile from "../myprofile/page";
-import Forum from "../forum/page";
+import { Link as ScrollLink } from "react-scroll";
 
 interface ProfileData {
     fullName: string;
@@ -44,6 +44,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     });
 
     const user: User | null = auth.currentUser;
+    
 
     const fetchUserProfile = async () => {
         if (user) {
@@ -73,7 +74,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
             <div className={`fixed top-0 w-full ${navbarBackground} flex items-center justify-between z-30`}>
                 <div className="w-5/6 mx-auto flex items-center justify-between">
                     <div className="w-full gap-16 flex items-center justify-between">
-                        <Image src="/assets/Logo.png" alt="Logo" width={140} height={100} />
+                        <Image src="/assets/Logo.png" alt="Logo" width={100} height={100} />
 
                         <div className="w-full flex items-center justify-between">
                             <div className="text-md gap-8 flex items-center justify-between">

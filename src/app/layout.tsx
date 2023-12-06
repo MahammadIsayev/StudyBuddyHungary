@@ -8,6 +8,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
+      <title>Study Buddy Hungary</title>
       <body className="h-full">
 
         {children}

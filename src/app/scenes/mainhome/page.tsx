@@ -7,12 +7,24 @@ import { BiWorld } from 'react-icons/bi';
 import { MdSchool } from 'react-icons/md';
 import { FaComments } from 'react-icons/fa'
 import { PiBooksFill } from 'react-icons/pi'
+import { useState } from "react";
+import InstructionsModal from "@/app/instructionsmodal/page";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 };
 
 const MainHome = ({ setSelectedPage }: Props) => {
+  const [isInstructionsModalOpen, setIsInstructionsModalOpen] = useState(false);
+
+  const openInstructionsModal = () => {
+    setIsInstructionsModalOpen(true);
+  };
+
+  const closeInstructionsModal = () => {
+    setIsInstructionsModalOpen(false);
+  };
+
   return (
     <div>
       <section id="home" className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0 mt-12">
@@ -58,13 +70,16 @@ const MainHome = ({ setSelectedPage }: Props) => {
               <Button setSelectedPage={setSelectedPage}>
                 Find your Study Partner
               </Button>
-              <AnchorLink
+              <button
                 className="font-bold text-orange-400 hover:text-orange-500 underline"
-                onClick={() => setSelectedPage(SelectedPage.Community)}
-                href={`#${SelectedPage.Community}`}
+                onClick={openInstructionsModal}
               >
-                <p>Learn More</p>
-              </AnchorLink>
+                Get started
+              </button>
+              <InstructionsModal
+                isOpen={isInstructionsModalOpen}
+                onRequestClose={closeInstructionsModal}
+              />
             </motion.div>
           </div>
 
@@ -87,7 +102,7 @@ const MainHome = ({ setSelectedPage }: Props) => {
       </section>
 
       {/* NEW SECTION: Key Benefits */}
-      <section className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0 mt-36">
+      <section className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0 mt-36 max-w-screen-xl mx-auto">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-800 mb-12">
             Key Benefits
