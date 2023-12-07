@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'; // Import your Firebase auth configuration
 import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
+import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 
 export default function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleSignIn = async () => {
@@ -19,6 +21,12 @@ export default function Signin() {
       console.error('Error signing in:', error);
     }
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const isButtonDisabled = !email || !password;
 
   return (
     <ChatContextProvider>
@@ -58,17 +66,18 @@ export default function Signin() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-black">
                   Password
                 </label>
-                <div className="text-sm">
-                  <div onClick={() => router.push('/forgot-password')} className="cursor-pointer font-semibold text-indigo-700 hover:text-indigo-400">
-                    Forgot password?
-                  </div>
-                </div>
+                <button
+                  onClick={togglePasswordVisibility}
+                  className="text-indigo-500 focus:outline-none"
+                >
+                  {showPassword ? <BsEyeSlash size={20} /> : <BsEye size={20} />}
+                </button>
               </div>
               <div className="mt-2">
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -81,9 +90,10 @@ export default function Signin() {
               <button
                 onClick={handleSignIn}
                 disabled={!email || !password}
-                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                className={`${isButtonDisabled ? 'cursor-not-allowed opacity-40' : ''
+                  } flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500`}
               >
-                Sign in
+                Sign-in
               </button>
             </div>
           </div>
@@ -91,9 +101,14 @@ export default function Signin() {
           <p className="mt-10 text-center text-sm text-gray-700">
             Not a member?{' '}
             <button onClick={() => router.push('signup')} className="font-semibold leading-6 text-indigo-700 hover:text-indigo-400">
-              Sign-up
+              Sign up
             </button>
           </p>
+          <div className="text-sm">
+            <div onClick={() => router.push('/forgot-password')} className="cursor-pointer font-semibold text-indigo-700 hover:text-indigo-400 text-center">
+              Forgot password?
+            </div>
+          </div>
         </div>
       </div>
     </ChatContextProvider>

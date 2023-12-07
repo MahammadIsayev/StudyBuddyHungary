@@ -1,6 +1,5 @@
 import { SelectedPage } from "@/app/shared/types";
 import Button from "@/app/shared/button";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { BiWorld } from 'react-icons/bi';
