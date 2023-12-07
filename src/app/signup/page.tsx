@@ -2,18 +2,20 @@
 //Password should be at least 6 characters, Firebase: Error (auth/invalid-email)
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
 import { useRouter } from 'next/navigation';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 export default function Signup() {
-  const router = useRouter()
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  const [redirectingDots, setRedirectingDots] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -29,6 +31,18 @@ export default function Signup() {
   const signup = async () => {
     if (password === passwordAgain) {
       try {
+
+        setIsSignupSuccess(true);
+
+        setTimeout(() => {
+          setIsSignupSuccess(false);
+
+
+          setTimeout(() => {
+            router.push('/');
+          }, 4000);
+        }, 4000);
+
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
@@ -49,13 +63,21 @@ export default function Signup() {
 
         // localStorage.setItem('currentUser', JSON.stringify(userData));
 
-        router.push("/signin")
-
       } catch (error) {
         console.error('Error signing up:', error);
       }
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRedirectingDots((prevDots) => {
+        return prevDots.length === 3 ? '' : prevDots + '.';
+      });
+    }, 400);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ChatContextProvider>
@@ -71,6 +93,16 @@ export default function Signup() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          {isSignupSuccess && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-md text-center">
+                <p className="text-green-500 font-semibold">
+                  Account created successfully!
+                </p>
+                <p className="text-black">Redirecting {redirectingDots}</p>
+              </div>
+            </div>
+          )}
           <div className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-black">
