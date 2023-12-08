@@ -30,6 +30,8 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
     });
     const [isUpdating, setUpdating] = useState(false);
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
+    const [fileError, setFileError] = useState<string | null>(null);
+
     // console.log("Updated profile data:", updatedProfileData);
     const user: User | null = auth.currentUser;
 
@@ -59,6 +61,8 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                 console.error('User is not authenticated');
                 return;
             }
+
+            if (fileError) return;
             setUpdating(true);
             const userDocRef = doc(db, 'users', user.uid);
             const updatedFields: Partial<ProfileData> = {};
@@ -104,12 +108,20 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
         }
     };
 
+    const isImageFile = (file: File): boolean => {
+        // List of allowed image MIME types
+        const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+        return allowedImageTypes.includes(file.type);
+    };
+
+
 
 
     return (
-        <div className="mt-10">
+        <div className="mt-6">
 
-            <div className="mb-8">
+            <div className="mb-4">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">Profile Picture</label>
                 <input
                     type="file"
@@ -117,29 +129,46 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                         const selectedFile = e.target.files?.[0];
 
                         if (selectedFile) {
-                            setProfilePicture(selectedFile);
+                            if (isImageFile(selectedFile)) {
+                                setProfilePicture(selectedFile);
+                                setFileError(null);
+                            } else {
+                                setFileError('Incorrect file type. Please select an image file.');
+                            }
                         } else {
-                            console.error('No file selected');
+                            setFileError('No file selected');
                         }
                     }}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 />
+                {updatedProfileData.profilePictureURL && !profilePicture && (
+                    <div className="flex-center mt-2">
+                        <img
+                            src={updatedProfileData.profilePictureURL}
+                            alt="Current Profile"
+                            className="rounded-full h-12 w-12 object-cover"
+                        />
+                    </div>
+                )}
+                {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
             </div>
-            <div className="mb-8">
+
+            <div className="mb-4">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">Full Name</label>
                 <input
                     type="text"
                     value={updatedProfileData.fullName}
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, fullName: e.target.value }))}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 />
             </div>
-            <div className="mb-8">
+
+            <div className="mb-4">
                 <label className="block text-sm text-orange-400 font-semibold">City</label>
                 <select
                     value={updatedProfileData.city}
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, city: e.target.value }))}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 >
                     <option value=""></option>
                     <option value="Budapest">Budapest</option>
@@ -199,14 +228,14 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     <option value="Vácduka">Vácduka</option>
                 </select>
             </div>
-            <div className="mb-8">
+
+            <div className="mb-4">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">University</label>
                 <select
                     value={updatedProfileData.university}
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, university: e.target.value }))}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 >
-                    <option value=""></option>
                     <option value="Eötvös Loránd University">Eötvös Loránd University</option>
                     <option value="Central European University">Central European University</option>
                     <option value="University of Debrecen">University of Debrecen</option>
@@ -269,33 +298,40 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     <option value="The Szent István Institute">The Szent István Institute</option>
                 </select>
             </div>
-            <div className="mb-8">
+
+            <div className="mb-4">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">Education Level</label>
                 <select
                     value={updatedProfileData.educationLevel}
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, educationLevel: e.target.value }))}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 >
-                    <option value=""></option>
-                    <option value="Bachelors">Bachelors</option>
-                    <option value="Masters">Masters</option>
-                    <option value="PhD">PhD</option>
+                    {/* ... Options ... */}
                 </select>
             </div>
-            <div className="mb-8">
+
+            <div className="mb-4">
                 <label className="block text-sm font-medium text-orange-400 font-semibold">Major</label>
                 <input
                     type="text"
                     value={updatedProfileData.major}
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, major: e.target.value }))}
-                    className="mt-1 p-2 border rounded w-full"
+                    className="mt-1 p-2 border rounded w-full text-sm"
                 />
             </div>
-            <button onClick={handleUpdateProfile} disabled={isUpdating} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded float-right">
+
+            <button onClick={handleUpdateProfile} disabled={isUpdating} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded float-right text-sm">
                 {isUpdating ? "Updating..." : "Save"}
             </button>
         </div>
     );
+
 };
 
 export default MyProfile;
+
+
+
+
+
+

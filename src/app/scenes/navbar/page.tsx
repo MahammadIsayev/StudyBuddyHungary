@@ -11,7 +11,7 @@ import {
 import { User } from 'firebase/auth';
 import { db, auth } from "../../firebase"
 import MyProfile from "../myprofile/page";
-import { Link as ScrollLink } from "react-scroll";
+import { useRouter } from "next/navigation"
 
 interface ProfileData {
     fullName: string;
@@ -33,6 +33,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         ? "bg-[#fbbb5b] drop-shadow-xl"
         : "bg-[#fbbb5b]";
 
+    const router = useRouter()
     const [isProfileModalOpen, setProfileModalOpen] = useState(false);
     const [updatedProfileData, setUpdatedProfileData] = useState<ProfileData>({
         fullName: "",
@@ -44,7 +45,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     });
 
     const user: User | null = auth.currentUser;
-    
+
 
     const fetchUserProfile = async () => {
         if (user) {
@@ -65,7 +66,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
     const signingOut = () => {
         signOut(auth);
-        window.location.href = '/signin';
+        router.push('/signin');
     }
 
 
