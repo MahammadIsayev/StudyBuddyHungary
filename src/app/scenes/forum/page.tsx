@@ -82,6 +82,11 @@ const Forum = ({ setSelectedPage }: Props) => {
                     fullName: doc.data().author.fullName,
                     authorId: doc.data().author.id
                 }));
+                posts.forEach(post => {
+                    if (post.authorId === auth.currentUser?.uid) {
+                        post.fullName = fullName;  // Update with the latest full name
+                    }
+                });
                 setPostsList(posts);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -102,10 +107,14 @@ const Forum = ({ setSelectedPage }: Props) => {
                     const commentQuerySnapshot = await getDocs(query(commentCollectionRef, where('postId', '==', post.id)));
 
                     commentQuerySnapshot.forEach((commentDoc) => {
+                        const commentAuthorId = commentDoc.data().authorId;
+
+                        // Update the full name for the current user
+                        const updatedFullName = (commentAuthorId === auth.currentUser?.uid) ? fullName : commentDoc.data().fullName;
                         postComments.push({
                             id: commentDoc.id,
                             authorId: commentDoc.data().authorId,
-                            fullName: commentDoc.data().fullName,
+                            fullName: updatedFullName,
                             commentText: commentDoc.data().commentText,
                             timestamp: commentDoc.data().timestamp,
                         });
@@ -120,7 +129,7 @@ const Forum = ({ setSelectedPage }: Props) => {
             }
         };
 
-        getComments();
+        // getComments();
 
         getComments();
     }, [commentCollectionRef]);

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import styles from "./messages.module.css"
 import { useUser } from './context/AuthProvider'
 import { ChatContext } from './context/ChatContextProvider'
-import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { Timestamp, arrayUnion, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { v4 as uuid } from "uuid"
 import { db, storage } from "../src/app/firebase"
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
@@ -25,60 +25,74 @@ const Input = (props: Props) => {
             console.error('Current user is null');
             return;
         }
-        if (img) {
-            const storageRef = ref(storage, uuid());
 
-            const uploadTask = uploadBytesResumable(storageRef, img);
+        try {
+            const chatDocRef = doc(db, 'chats', data.chatId);
+            const chatDoc = await getDoc(chatDocRef);
 
-            uploadTask.on(
-                'state_changed',
-                (error) => {
-                    console.error('Error uploading image:', error);
-                    // TODO: Handle the error appropriately
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                        await updateDoc(doc(db, "chats", data.chatId), {
-                            messages: arrayUnion({
-                                id: uuid(),
-                                text,
-                                senderId,
-                                date: Timestamp.now(),
-                                img: downloadURL,
-                            }),
+            if (!chatDoc.exists()) {
+                // Create the chat document if it doesn't exist
+                await setDoc(chatDocRef, { messages: [] });
+            }
+
+            if (img) {
+                // Upload image and update document
+                const storageRef = ref(storage, uuid());
+                const uploadTask = uploadBytesResumable(storageRef, img);
+
+                uploadTask.on(
+                    'state_changed',
+                    (error) => {
+                        console.error('Error uploading image:', error);
+                        // TODO: Handle the error appropriately
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                            await updateDoc(chatDocRef, {
+                                messages: arrayUnion({
+                                    id: uuid(),
+                                    text,
+                                    senderId,
+                                    date: Timestamp.now(),
+                                    img: downloadURL,
+                                }),
+                            });
                         });
-                    });
-                }
-            );
-        } else {
-            await updateDoc(doc(db, "chats", data.chatId), {
-                messages: arrayUnion({
-                    id: uuid(),
+                    }
+                );
+            } else {
+                // Update document with text message
+                await updateDoc(chatDocRef, {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text,
+                        senderId,
+                        date: Timestamp.now(),
+                    }),
+                });
+            }
+
+            // Update userChats documents for both users
+            await updateDoc(doc(db, "userChats", currentUser.uid), {
+                [data.chatId + ".lastMessage"]: {
                     text,
-                    senderId,
-                    date: Timestamp.now(),
-                }),
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
             });
+
+            await updateDoc(doc(db, "userChats", data.user.uid), {
+                [data.chatId + ".lastMessage"]: {
+                    text,
+                },
+                [data.chatId + ".date"]: serverTimestamp(),
+            });
+
+            setText("");
+            setImg(null);
+        } catch (error) {
+            console.error('Error handling send:', error);
         }
-
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text,
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
-
-        await updateDoc(doc(db, "userChats", data.user.uid), {
-            [data.chatId + ".lastMessage"]: {
-                text,
-            },
-            [data.chatId + ".date"]: serverTimestamp(),
-        });
-
-        setText("");
-        setImg(null);
     };
-
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();

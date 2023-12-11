@@ -3,13 +3,17 @@ import styles from './messages.module.css';
 import { auth, db } from '../src/app/firebase';
 import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
+import { Chat } from 'react-bootstrap-icons';
 
 type Props = {};
+
 
 const Search = (props: Props) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [currentUserDetails, setCurrentUserDetails] = useState<any | null>(null);
+    const [selectedUser, setSelectedUser] = useState<any | null>(null)
+    // const [openChatDirectly, setOpenChatDirectly] = useState<boolean>(false);
     const currentUser: User | null = auth.currentUser;
 
     useEffect(() => {
@@ -43,6 +47,7 @@ const Search = (props: Props) => {
             });
 
             setSearchResults(results);
+            setSearchQuery('');
         } catch (error) {
             console.error('Error searching:', error);
         }
@@ -63,6 +68,7 @@ const Search = (props: Props) => {
                 console.error('UID not found in selectedUser:', selectedUser);
                 return;
             }
+
 
             // console.log('Selected User:', selectedUser);
             // console.log('Current User:', currentUser);
@@ -109,6 +115,15 @@ const Search = (props: Props) => {
                             date: serverTimestamp(),
                         },
                     });
+
+
+                    setSearchResults((prevResults) =>
+                        prevResults.filter((user) => user.uid !== selectedUser.uid)
+                    );
+
+                    // Clear the search bar
+                    setSearchQuery('');
+                    setSelectedUser(selectedUser);
 
                     console.log('Chat created successfully!');
                 } else {
@@ -161,6 +176,8 @@ const Search = (props: Props) => {
                     </div>
                 ))}
             </div>
+            {searchResults.length > 0 && <hr />}
+            {/* {openChatDirectly && <Chat />} */}
         </div>
     );
 };

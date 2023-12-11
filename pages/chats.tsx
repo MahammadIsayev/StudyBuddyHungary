@@ -15,6 +15,7 @@ interface ChatData {
     };
     lastMessage?: {
         text: string;
+        date?: { seconds: number; nanoseconds: number };
     };
 }
 
@@ -64,19 +65,24 @@ const Chats: React.FC = () => {
     return (
         <div className={styles.chats}>
             {Object.entries(chats)?.length > 0 ? (
-                Object.entries(chats)?.sort((a, b) => a[1].date?.seconds || 0 - b[1].date?.seconds || 0).map(([chatId, chatData]) => (
-                    <div
-                        key={chatId}
-                        className={styles.userChat}
-                        onClick={() => handleSelect(chatData.userInfo)}
-                    >
-                        <img src={chatData.userInfo.photoURL} alt="" className={styles.userImage} />
-                        <div className={styles.userChatInfo}>
-                            <span className={styles.userName}>{chatData.userInfo.fullName}</span>
-                            <p className={styles.defaultText}>{chatData.lastMessage?.text}</p>
+                Object.entries(chats)
+                    .sort(([, chatDataA], [, chatDataB]) =>
+                        (chatDataB.lastMessage?.date?.seconds || chatDataB.date?.seconds) -
+                        (chatDataA.lastMessage?.date?.seconds || chatDataA.date?.seconds)
+                    )
+                    .map(([chatId, chatData]) => (
+                        <div
+                            key={chatId}
+                            className={styles.userChat}
+                            onClick={() => handleSelect(chatData.userInfo)}
+                        >
+                            <img src={chatData.userInfo.photoURL} alt="" className={styles.userImage} />
+                            <div className={styles.userChatInfo}>
+                                <span className={styles.userName}>{chatData.userInfo.fullName}</span>
+                                <p className={styles.defaultText}>{chatData.lastMessage?.text}</p>
+                            </div>
                         </div>
-                    </div>
-                ))
+                    ))
             ) : (
                 <p className={styles.noChatsText}>No chats yet. Start chatting with someone!</p>
             )}
