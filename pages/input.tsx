@@ -88,14 +88,14 @@ const Input = (props: Props) => {
 
     return (
         <div className={styles.textInput}>
-            <input type="text" placeholder='Add a message' value={text} className={styles.typeInput} onChange={e => setText(e.target.value)} onKeyDown={handleKeyPress} />
+            <input type="text" placeholder='Add a message' value={text} className={styles.typeInput} disabled={!data.user.uid} onChange={e => setText(e.target.value)} onKeyDown={handleKeyPress} />
             <div className={styles.send}>
                 <img src="/assets/attach.png" alt="" className={styles.sendImage} />
                 <input type="file" style={{ display: 'none' }} id='file' onChange={e => setImg(e.target.files?.[0] || null)} />
                 <label htmlFor="file">
                     <img src="/assets/img.png" alt="" className={styles.sendImage} />
                 </label>
-                <button onClick={handleSend} className={styles.sendButton}>Send</button>
+                <button onClick={handleSend} disabled={!data.user.uid} className={styles.sendButton}>Send</button>
             </div>
         </div>
     )

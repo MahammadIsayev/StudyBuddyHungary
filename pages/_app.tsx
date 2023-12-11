@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <AuthProvider>
             <ChatContextProvider>
                 <Component {...pageProps} />
-                <Footer />
+                {/* <Footer /> */}
             </ChatContextProvider>
         </AuthProvider>
     );

@@ -5,6 +5,8 @@ import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } fro
 import { db, auth } from '../../firebase';
 import { User } from 'firebase/auth';
 import { useUser } from '../../../../pages/context/AuthProvider';
+import { PencilSquare } from 'react-bootstrap-icons';
+import PostModal from '@/app/threadmodal/page';
 
 type Props = {
     setSelectedPage: (value: SelectedPage) => void;
@@ -34,6 +36,8 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [comments, setComments] = useState<{ [postId: string]: Comment[] }>({});
     const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
     const [userColors, setUserColors] = useState<{ [userId: string]: string }>({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [scrollButtonVisible, setScrollButtonVisible] = useState(true);
 
 
     const user: User | null = useUser();
@@ -223,71 +227,73 @@ const Forum = ({ setSelectedPage }: Props) => {
         return newColor;
     };
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const createPostAndCloseModal = () => {
+        createPost();
+        closeModal();
+    };
+
     return (
         <section id="forum" className="py-8 bg-blue-50">
-            <div className="bg-white rounded-md shadow-2xl p-20 max-w-2xl mx-auto mt-24">
-                <h1 className="text-3xl font-semibold mb-6">Forum</h1>
-                <h2 className="text-xl font-semibold mb-6">Create a post</h2>
-                <div className="inputGp mb-4">
-                    <label className="block text-sm font-medium text-gray-700" htmlFor="title">
-                        Title
-                    </label>
-                    <input
-                        id="title"
-                        type="text"
-                        placeholder="Enter a descriptive title..."
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300"
-                    />
-                </div>
-                <div className="inputGp mb-4">
-                    <label className="block text-sm font-medium text-gray-700" htmlFor="post">
-                        Post
-                    </label>
-                    <textarea
-                        id="post"
-                        placeholder="Share your thoughts, ask questions, or provide insights..."
-                        value={postText}
-                        onChange={(e) => setPostText(e.target.value)}
-                        className="mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300"
-                        style={{ resize: 'none' }}
-                    ></textarea>
-                </div>
-                <button
-                    onClick={createPost}
-                    className="float-right bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300 "
-                >
-                    Share
-                </button>
-            </div>
+            <h1 className="text-3xl font-semibold mb-6 text-center tracking-wide mt-24">Active Forum Threads</h1>
+
+            <button
+                onClick={openModal}
+                className={`fixed bottom-4 right-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300`}
+            >
+                <PencilSquare size={20} />
+            </button>
+            {/* PostModal component */}
+            <PostModal
+                isOpen={isModalOpen}
+                closeModal={closeModal}
+                createPost={createPostAndCloseModal}
+                title={title}
+                setTitle={setTitle}
+                postText={postText}
+                setPostText={setPostText}
+            />
             <div className='flex flex-wrap justify-between mt-2 max-w-screen-xl mx-auto'>
                 {postLists.map((post) => (
 
-                    <div key={post.id} className={`bg-white rounded-md shadow-md p-6 mt-2 w-full`}>
+                    <div key={post.id} className={`bg-white rounded-md shadow-xl p-6 mt-4 w-full`}>
                         <div className="mb-4 flex justify-between items-center">
                             <div className="title">
                                 <h1 className="text-2xl font-semibold">{post.title}</h1>
                             </div>
                             {post.authorId === auth.currentUser?.uid &&
                                 <button onClick={() => deletePost(post.id)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                        <path stroke-linecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                     </svg>
                                 </button>}
                         </div>
-                        <div className="postTextContainer mb-4">{post.postText}</div>
+                        <div className="postTextContainer mb-4">
+                            {post.postText.split('\n').map((paragraph, index) => (
+                                <React.Fragment key={index}>
+                                    {index > 0 && <br />}
+                                    {paragraph}
+                                </React.Fragment>))}
+                        </div>
                         <h3 className="text-blue-500">@{post.fullName}</h3>
                         <div className="flex items-center">
                             <textarea
                                 onChange={(e) => setCommentTexts((prev) => ({ ...prev, [post.id]: e.target.value }))}
                                 onKeyDown={(e) => handleKeyPress(e, post.id)}
                                 value={commentTexts[post.id] || ''}
-                                style={{ resize: 'none' }}
+                                style={{ resize: 'none', maxHeight: '150px' }}
                                 className='mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300 bg-gray-100 text-gray-800'
                                 cols={40}
                                 rows={2}
                                 placeholder='Add a comment'
+                                maxLength={1000}
                             ></textarea>
                             <button
                                 onClick={() => createComment(post.id)}
@@ -301,7 +307,12 @@ const Forum = ({ setSelectedPage }: Props) => {
                             .sort((a, b) => b.timestamp?.toMillis() - a.timestamp?.toMillis())
                             .map((comment) => (
                                 <div key={comment.id} className="bg-gray-100 p-2 mt-2 rounded-md">
-                                    <strong style={{ color: getColorForUser(comment.authorId) }}>{comment.fullName}:</strong> {comment.commentText}
+                                    <strong style={{ color: getColorForUser(comment.authorId) }}>{comment.fullName}: </strong>
+                                    {comment.commentText.split('\n').map((paragraph, index) => (
+                                        <React.Fragment key={index}>
+                                            {index > 0 && <br />}
+                                            {paragraph}
+                                        </React.Fragment>))}
                                     <p className="text-gray-500">{comment.timestamp?.toDate().toLocaleString()}</p>
                                 </div>
                             ))}

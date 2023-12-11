@@ -19,7 +19,7 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
       to={lowerCasePage}
       spy={true}
       smooth={true}
-      offset={-70}
+      offset={-100}
       onClick={() => setSelectedPage(lowerCasePage)}
     >
       {page}

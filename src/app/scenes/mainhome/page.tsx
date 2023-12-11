@@ -103,7 +103,7 @@ const MainHome = ({ setSelectedPage }: Props) => {
       {/* NEW SECTION: Key Benefits */}
       <section className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0 mt-36 max-w-screen-xl mx-auto">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-12">
+          <h2 className="text-3xl font-semibold text-gray-800 tracking-wide mb-12">
             Key Benefits
           </h2>
           <div className="flex justify-between space-x-6">

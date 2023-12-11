@@ -170,62 +170,25 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, city: e.target.value }))}
                     className="mt-1 p-2 border rounded w-full text-sm"
                 >
-                    <option value=""></option>
-                    <option value="Budapest">Budapest</option>
-                    <option value="Debrecen">Debrecen</option>
-                    <option value="Pécs">Pécs</option>
-                    <option value="Miskolc">Miskolc</option>
-                    <option value="Szeged">Szeged</option>
-                    <option value="Győr">Győr</option>
-                    <option value="Veszprém">Veszprém</option>
-                    <option value="Szombathely">Szombathely</option>
-                    <option value="Dunaújváros">Dunaújváros</option>
-                    <option value="Kaposvár">Kaposvár</option>
-                    <option value="Sopron">Sopron</option>
-                    <option value="Szentendre">Szentendre</option>
-                    <option value="Zalaegerszeg">Zalaegerszeg</option>
-                    <option value="Eger">Eger</option>
-                    <option value="Kecskemét">Kecskemét</option>
-                    <option value="Tatabánya">Tatabánya</option>
-                    <option value="Salgótarján">Salgótarján</option>
-                    <option value="Hódmezővásárhely">Hódmezővásárhely</option>
-                    <option value="Nagykanizsa">Nagykanizsa</option>
-                    <option value="Szolnok">Szolnok</option>
-                    <option value="Székesfehérvár">Székesfehérvár</option>
-                    <option value="Szekszárd">Szekszárd</option>
-                    <option value="Pécel">Pécel</option>
-                    <option value="Sárvár">Sárvár</option>
-                    <option value="Ajka">Ajka</option>
-                    <option value="Ózd">Ózd</option>
-                    <option value="Várpalota">Várpalota</option>
-                    <option value="Dabas">Dabas</option>
-                    <option value="Orosháza">Orosháza</option>
-                    <option value="Kiskunhalas">Kiskunhalas</option>
-                    <option value="Hajdúböszörmény">Hajdúböszörmény</option>
-                    <option value="Keszthely">Keszthely</option>
-                    <option value="Hatvan">Hatvan</option>
-                    <option value="Kalocsa">Kalocsa</option>
-                    <option value="Cegléd">Cegléd</option>
-                    <option value="Szarvas">Szarvas</option>
-                    <option value="Baja">Baja</option>
-                    <option value="Gödöllő">Gödöllő</option>
-                    <option value="Gyöngyös">Gyöngyös</option>
-                    <option value="Monor">Monor</option>
-                    <option value="Nagyatád">Nagyatád</option>
-                    <option value="Mezőkövesd">Mezőkövesd</option>
-                    <option value="Vác">Vác</option>
-                    <option value="Pilisvörösvár">Pilisvörösvár</option>
-                    <option value="Esztergom">Esztergom</option>
-                    <option value="Sárbogárd">Sárbogárd</option>
-                    <option value="Veszprémvarsány">Veszprémvarsány</option>
-                    <option value="Zamárdi">Zamárdi</option>
-                    <option value="Gyömrő">Gyömrő</option>
-                    <option value="Hatvanbánhida">Hatvanbánhida</option>
-                    <option value="Tapolca">Tapolca</option>
-                    <option value="Ceglédbercel">Ceglédbercel</option>
-                    <option value="Szabadszállás">Szabadszállás</option>
-                    <option value="Nagytarcsa">Nagytarcsa</option>
-                    <option value="Vácduka">Vácduka</option>
+
+                    <option key="city" value="" disabled>Select a city</option>
+                    <option key="Baja" value="Baja">Baja</option>
+                    <option key="Budapest" value="Budapest">Budapest</option>
+                    <option key="Debrecen" value="Debrecen">Debrecen</option>
+                    <option key="Dunaújváros" value="Dunaújváros">Dunaújváros</option>
+                    <option key="Eger" value="Eger">Eger</option>
+                    <option key="Esztergom" value="Esztergom">Esztergom</option>
+                    <option key="Gödöllo" value="Gödöllo">Gödöllo</option>
+                    <option key="Gyor" value="Gyor">Gyor</option>
+                    <option key="Kecskemét" value="Kecskemét">Kecskemét</option>
+                    <option key="Nyíregyháza" value="Nyíregyháza">Nyíregyháza</option>
+                    <option key="Pécel" value="Pécel">Pécel</option>
+                    <option key="Pécs" value="Pécs">Pécs</option>
+                    <option key="Sopron" value="Sopron">Sopron</option>
+                    <option key="Székesfehérvár" value="Székesfehérvár">Székesfehérvár</option>
+                    <option key="Szeged" value="Szeged">Szeged</option>
+                    <option key="Tatabánya" value="Tatabánya">Tatabánya</option>
+                    <option key="Veszprém" value="Veszprém">Veszprém</option>
                 </select>
             </div>
 
@@ -236,66 +199,48 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, university: e.target.value }))}
                     className="mt-1 p-2 border rounded w-full text-sm"
                 >
-                    <option value="Eötvös Loránd University">Eötvös Loránd University</option>
-                    <option value="Central European University">Central European University</option>
-                    <option value="University of Debrecen">University of Debrecen</option>
-                    <option value="University of Pécs">University of Pécs</option>
-                    <option value="Budapest University of Technology and Economics">Budapest University of Technology and Economics</option>
-                    <option value="Corvinus University of Budapest">Corvinus University of Budapest</option>
-                    <option value="Semmelweis University">Semmelweis University</option>
-                    <option value="University of Szeged">University of Szeged</option>
-                    <option value="Széchenyi István University">Széchenyi István University</option>
-                    <option value="University of Miskolc">University of Miskolc</option>
-                    <option value="University of Physical Education">University of Physical Education</option>
-                    <option value="Baptist Theological Seminary">Baptist Theological Seminary</option>
-                    <option value="International Business School">International Business School</option>
-                    <option value="McDaniel College Budapest">McDaniel College Budapest</option>
-                    <option value="Moholy-Nagy University of Art and Design">Moholy-Nagy University of Art and Design</option>
-                    <option value="Óbuda University">Óbuda University</option>
-                    <option value="Premier Business School">Premier Business School</option>
-                    <option value="Reformed Theological University">Reformed Theological University</option>
-                    <option value="Tancsics Mihály Vocational College">Tancsics Mihály Vocational College</option>
-                    <option value="The Hungarian University of Fine Arts">The Hungarian University of Fine Arts</option>
-                    <option value="United Theological Seminary">United Theological Seminary</option>
-                    <option value="University of Physical Education">University of Physical Education</option>
-                    <option value="Berzsenyi Dániel College">Berzsenyi Dániel College</option>
-                    <option value="Budapest Metropolitan University">Budapest Metropolitan University</option>
-                    <option value="Budapest University of Jewish Studies">Budapest University of Jewish Studies</option>
-                    <option value="College of Communication and Business">College of Communication and Business</option>
-                    <option value="European Business School Budapest">European Business School Budapest</option>
-                    <option value="Evangelical Lutheran Theological University">Evangelical Lutheran Theological University</option>
-                    <option value="Gothard Theological College">Gothard Theological College</option>
-                    <option value="Kodolányi János University of Applied Sciences">Kodolányi János University of Applied Sciences</option>
-                    <option value="Liszt Ferenc Academy of Music">Liszt Ferenc Academy of Music</option>
-                    <option value="National Public Service University">National Public Service University</option>
-                    <option value="Perényi Péter Catholic University">Perényi Péter Catholic University</option>
-                    <option value="Saint Stephen University">Saint Stephen University</option>
-                    <option value="Sapientia Hungarian University of Transylvania">Sapientia Hungarian University of Transylvania</option>
-                    <option value="Szent Ignác Catholic Student Hall">Szent Ignác Catholic Student Hall</option>
-                    <option value="Szent István University">Szent István University</option>
-                    <option value="Szent Kereszt Catholic University">Szent Kereszt Catholic University</option>
-                    <option value="Szentpéteri Martin Lutheran Evangelical Theological College">Szentpéteri Martin Lutheran Evangelical Theological College</option>
-                    <option value="Tomori Pál College">Tomori Pál College</option>
-                    <option value="University of Dunaújváros">University of Dunaújváros</option>
-                    <option value="University of Kaposvár">University of Kaposvár</option>
-                    <option value="University of Pécs">University of Pécs</option>
-                    <option value="University of Public Service">University of Public Service</option>
-                    <option value="University of Sopron">University of Sopron</option>
-                    <option value="University of West Hungary">University of West Hungary</option>
-                    <option value="University of Zena">University of Zena</option>
-                    <option value="West Hungarian University">West Hungarian University</option>
-                    <option value="David Sinyard Student Apartment College">David Sinyard Student Apartment College</option>
-                    <option value="Hungarian University of Fine Arts">Hungarian University of Fine Arts</option>
-                    <option value="Janus Pannonius University">Janus Pannonius University</option>
-                    <option value="Károly Róbert College">Károly Róbert College</option>
-                    <option value="Kodolányi János College">Kodolányi János College</option>
-                    <option value="Kossuth Lajos Student Dormitory">Kossuth Lajos Student Dormitory</option>
-                    <option value="Mosonmagyaróvár Vásári Pályaműhely Secondary School">Mosonmagyaróvár Vásári Pályaműhely Secondary School</option>
-                    <option value="National University of Public Service">National University of Public Service</option>
-                    <option value="Pázmány Péter Catholic University">Pázmány Péter Catholic University</option>
-                    <option value="SárgaFüzet Theatre School">SárgaFüzet Theatre School</option>
-                    <option value="Szolnok University College">Szolnok University College</option>
-                    <option value="The Szent István Institute">The Szent István Institute</option>
+                    <option key="uni" value="" disabled>Select university</option>
+                    <option key="AdventistaTeológiaiFõiskola" value="Adventista Teológiai Fõiskola">Adventista Teológiai Fõiskola</option>
+                    <option key="AndrássyUniversitätBudapest" value="Andrássy Universität Budapest">Andrássy Universität</option>
+                    <option key="BudapestiCorvinusEgyetem" value="Budapesti Corvinus Egyetem">Budapesti Corvinus Egyetem</option>
+                    <option key="BudapestiGazdaságiEgyetem" value="Budapesti Gazdasági Egyetem">Budapesti Gazdasági Egyetem</option>
+                    <option key="BudapestiMetropolitanEgyetem" value="Budapesti Metropolitan Egyetem">Budapesti Metropolitan Egyetem</option>
+                    <option key="BudapestiMuszakiésGazdaságtudományiEgyetem" value="Budapesti Muszaki és Gazdaságtudományi Egyetem">Budapesti Muszaki és Gazdaságtudományi Egyetem</option>
+                    <option key="DebreceniEgyetem" value="Debreceni Egyetem">Debreceni Egyetem</option>
+                    <option key="DebreceniReformátusHittudományiEgyetem" value="Debreceni Református Hittudományi Egyetem">Debreceni Református Hittudományi Egyetem</option>
+                    <option key="DunaújvárosiEgyetem" value="Dunaújvárosi Egyetem">Dunaújvárosi Egyetem</option>
+                    <option key="EdutusEgyetem" value="Edutus Egyetem">Edutus Egyetem</option>
+                    <option key="EötvösJózsefFoiskola" value="Eötvös József Foiskola">Eötvös József Foiskola</option>
+                    <option key="EötvösLorándTudományegyetem" value="Eötvös Loránd Tudományegyetem">Eötvös Loránd Tudományegyetem</option>
+                    <option key="EsztergomiHittudományiFõiskola" value="Esztergomi Hittudományi Fõiskola">Esztergomi Hittudományi Fõiskola</option>
+                    <option key="EszterházyKárolyEgyetem" value="Eszterházy Károly Egyetem">Eszterházy Károly Egyetem</option>
+                    <option key="GáborDénesFoiskola" value="Gábor Dénes Foiskola">Gábor Dénes Foiskola</option>
+                    <option key="InternationalBusinessSchool" value="International Business School">International Business School</option>
+                    <option key="KároliGáspárReformátusEgyetem" value="Károli Gáspár Református Egyetem">Károli Gáspár Református Egyetem</option>
+                    <option key="KodolányiJánosEgyetem" value="Kodolányi János Egyetem">Kodolányi János Egyetem</option>
+                    <option key="Közép-EurópaiEgyetem" value="Közép-Európai Egyetem">Közép-Európai Egyetem</option>
+                    <option key="LisztFerencZenemuvészetiEgyetem" value="Liszt Ferenc Zenemuvészeti Egyetem">Liszt Ferenc Zenemuvészeti Egyetem</option>
+                    <option key="MagyarAgrár-ésÉlettudományiEgyetem" value="Magyar Agrár- és Élettudományi Egyetem">Magyar Agrár- és Élettudományi Egyetem</option>
+                    <option key="MagyarKépzomuvészetiEgyetem" value="Magyar Képzomuvészeti Egyetem">Magyar Képzomuvészeti Egyetem</option>
+                    <option key="MagyarTáncmuvészetiEgyetem" value="Magyar Táncmuvészeti Egyetem">Magyar Táncmuvészeti Egyetem</option>
+                    <option key="MiltonFriedmanEgyetem" value="Milton Friedman Egyetem">Milton Friedman Egyetem</option>
+                    <option key="MiskolciEgyetem" value="Miskolci Egyetem">Miskolci Egyetem</option>
+                    <option key="Moholy-NagyMuvészetiEgyetem" value="Moholy-Nagy Muvészeti Egyetem">Moholy-Nagy Muvészeti Egyetem</option>
+                    <option key="NemzetiKözszolgálatiEgyetem" value="Nemzeti Közszolgálati Egyetem">Nemzeti Közszolgálati Egyetem</option>
+                    <option key="NeumannJánosEgyetem" value="Neumann János Egyetem">Neumann János Egyetem</option>
+                    <option key="NyíregyháziEgyetem" value="Nyíregyházi Egyetem">Nyíregyházi Egyetem</option>
+                    <option key="ÓbudaiEgyetem" value="Óbudai Egyetem">Óbudai Egyetem</option>
+                    <option key="PannonEgyetem" value="Pannon Egyetem">Pannon Egyetem</option>
+                    <option key="PázmányPéterKatolikusEgyetem" value="Pázmány Péter Katolikus Egyetem">Pázmány Péter Katolikus Egyetem</option>
+                    <option key="PécsiTudományegyetem" value="Pécsi Tudományegyetem">Pécsi Tudományegyetem</option>
+                    <option key="SemmelweisEgyetem" value="Semmelweis Egyetem">Semmelweis Egyetem</option>
+                    <option key="SoproniEgyetem" value="Soproni Egyetem">Soproni Egyetem</option>
+                    <option key="SzéchényiIstvánEgyetem" value="Széchényi István Egyetem">Széchényi István Egyetem</option>
+                    <option key="SzegediTudományegyetem" value="Szegedi Tudományegyetem">Szegedi Tudományegyetem</option>
+                    <option key="Színház-ésFilmmuvészetiEgyetem" value="Színház- és Filmmuvészeti Egyetem">Színház- és Filmmuvészeti Egyetem</option>
+                    <option key="TomoriPálFoiskola" value="Tomori Pál Foiskola">Tomori Pál Foiskola</option>
+                    <option key="WekerleSándorÜzletiFoiskola" value="Wekerle Sándor Üzleti Foiskola">Wekerle Sándor Üzleti Foiskola</option>
+                    <option key="WesleyJánosLelkészképzoFoiskola" value="Wesley János Lelkészképzo Foiskola">Wesley János Lelkészképzo</option>
                 </select>
             </div>
 
@@ -306,7 +251,10 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     onChange={(e) => setUpdatedProfileData((prevData) => ({ ...prevData, educationLevel: e.target.value }))}
                     className="mt-1 p-2 border rounded w-full text-sm"
                 >
-                    {/* ... Options ... */}
+                    <option key="level" value="" disabled>Select level</option>
+                    <option key="Bachelors" value="Bachelors">Bachelors</option>
+                    <option key="Masters" value="Masters">Masters</option>
+                    <option key="Doctoral" value="Doctoral">Doctoral</option>
                 </select>
             </div>
 

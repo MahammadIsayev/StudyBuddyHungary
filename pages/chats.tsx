@@ -64,7 +64,7 @@ const Chats: React.FC = () => {
     return (
         <div className={styles.chats}>
             {Object.entries(chats)?.length > 0 ? (
-                Object.entries(chats)?.sort((a, b) => a[1].date.seconds - b[1].date.seconds).map(([chatId, chatData]) => (
+                Object.entries(chats)?.sort((a, b) => a[1].date?.seconds || 0 - b[1].date?.seconds || 0).map(([chatId, chatData]) => (
                     <div
                         key={chatId}
                         className={styles.userChat}
