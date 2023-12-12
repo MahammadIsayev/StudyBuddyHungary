@@ -1,6 +1,6 @@
 /* .home */
 .home {
-  height: 96.5vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,8 +44,8 @@
   display: flex;
   align-items: center;
   background: linear-gradient(135deg, #3498db, #2980b9);
-  height: 50px;
-  padding: 10px;
+  height: 65px;
+  padding: 12px;
   justify-content: space-between;
   color: #ddddf7;
   margin-bottom: 10px;
@@ -89,12 +89,12 @@
 
 /* .searchForm */
 .searchForm {
-  padding: 10px;
+  padding: 8px;
   border-radius: 20px;
   background-color: #f2f2f2;
   display: flex;
   align-items: center;
-  width: 90%;
+  width: 95%;
   margin-left: 13px;
   cursor: text;
 }
@@ -181,7 +181,7 @@
 .chatInfo {
   bottom: 0;
   z-index: 1;
-  height: 50px;
+  height: 65px;
   background: linear-gradient(135deg, #fbbb5b, #3d7ed6);
   display: flex;
   align-items: center;
@@ -194,7 +194,8 @@
   /* background: #639fba; */
   background-image: url("/assets/chatbg.webp");
   padding: 10px;
-  height: calc(100% - 110px);
+  /* height: calc(100% - 20px); */
+  height: 83vh;
   overflow: auto;
   scrollbar-width: thin;
 }
@@ -323,4 +324,5 @@
 /* .noChatsText */
 .noChatsText {
   margin-left: 17px;
+  margin-top: 10px;
 }
