@@ -31,6 +31,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
     const [isUpdating, setUpdating] = useState(false);
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
+    const [updateSuccess, setUpdateSuccess] = useState(false);
 
     // console.log("Updated profile data:", updatedProfileData);
     const user: User | null = auth.currentUser;
@@ -95,9 +96,15 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
             setUpdating(false);
 
+            setUpdateSuccess(true);
+
             setTimeout(() => {
                 setProfileModalOpen(false);
             }, 1100);
+
+            setTimeout(() => {
+                setUpdateSuccess(false);
+            }, 3000);
 
             setTimeout(() => {
                 window.location.reload();
@@ -142,11 +149,11 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     className="mt-1 p-2 border rounded w-full text-sm"
                 />
                 {updatedProfileData.profilePictureURL && !profilePicture && (
-                    <div className="flex-center mt-2">
+                    <div className="flex-center mt-8">
                         <img
                             src={updatedProfileData.profilePictureURL}
                             alt="Current Profile"
-                            className="rounded-full h-12 w-12 object-cover"
+                            className="rounded-full h-16 w-16 object-cover mx-auto"
                         />
                     </div>
                 )}
@@ -267,7 +274,9 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
                     className="mt-1 p-2 border rounded w-full text-sm"
                 />
             </div>
-
+            {updateSuccess && (
+                <p className="text-green-500 text-sm">Profile updated successfully!</p>
+            )}
             <button onClick={handleUpdateProfile} disabled={isUpdating} className="bg-blue-500 font-semibold text-white px-4 py-2 rounded float-right text-sm">
                 {isUpdating ? "Updating..." : "Save"}
             </button>
