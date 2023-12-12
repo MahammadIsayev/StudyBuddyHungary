@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { User } from 'firebase/auth';
-import { auth } from '../../src/app/firebase'
+import { auth } from '../firebase'
 
 interface ChatContextProps {
     children: ReactNode;

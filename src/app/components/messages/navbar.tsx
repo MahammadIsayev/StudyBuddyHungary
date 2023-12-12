@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './messages.module.css';
-import { auth, db } from '../src/app/firebase';
+import { auth, db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 type Props = {};

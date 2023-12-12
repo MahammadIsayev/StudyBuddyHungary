@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './messages.module.css';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '../src/app/firebase';
-import { ChatContext } from './context/ChatContextProvider';
-import { useUser } from './context/AuthProvider';
+import { auth, db } from '../../firebase';
+import { ChatContext } from '../../contexts/ChatContextProvider';
+import { useUser } from '../../contexts/AuthProvider';
 
 interface ChatData {
     chatId: string;

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "./Link";
 import { SelectedPage } from "@/app/shared/types";
 import { signOut } from "firebase/auth";
-import Modal from "../modal/page";
+import Modal from "../../modals/myprofilemodal";
 import {
     doc,
     getDoc,

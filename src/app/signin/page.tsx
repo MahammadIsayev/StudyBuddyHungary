@@ -3,11 +3,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
+import { ChatContextProvider } from '../contexts/ChatContextProvider';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 
 
-export default function Signin() {
+const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -68,10 +68,12 @@ export default function Signin() {
   return (
     <ChatContextProvider>
 
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8" style={{
-        backgroundImage: `url('/assets/mainhome.png')`,
+      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8" style={{
+        background: `url('/assets/mainhome.png')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        // margin: 0,
+        // padding: '9.2%',
       }}>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
@@ -159,3 +161,5 @@ export default function Signin() {
     </ChatContextProvider>
   );
 }
+
+export default Signin

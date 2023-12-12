@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
 import styles from "./messages.module.css"
-import { useUser } from './context/AuthProvider'
-import { ChatContext } from './context/ChatContextProvider'
+import { useUser } from '../../contexts/AuthProvider'
+import { ChatContext } from '../../contexts/ChatContextProvider'
 import { Timestamp, arrayUnion, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { v4 as uuid } from "uuid"
-import { db, storage } from "../src/app/firebase"
+import { db, storage } from "../../firebase"
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 
 type Props = {}

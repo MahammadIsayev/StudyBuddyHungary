@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './messages.module.css';
-import { auth, db } from '../src/app/firebase';
+import { auth, db } from '../../firebase';
 import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { Chat } from 'react-bootstrap-icons';

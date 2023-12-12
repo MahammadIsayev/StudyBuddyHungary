@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styles from './messages.module.css';
 import Messages from './messages';
 import Input from './input';
-import { ChatContext } from './context/ChatContextProvider';
+import { ChatContext } from '../../contexts/ChatContextProvider';
 
 const Chat: React.FC = () => {
     const { data } = useContext(ChatContext);

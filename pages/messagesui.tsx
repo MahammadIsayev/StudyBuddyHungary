@@ -1,7 +1,7 @@
 import React from 'react'
-import Sidebar from './sidebar'
-import Chat from './chat'
-import styles from "./messages.module.css"
+import Sidebar from '../src/app/components/messages/sidebar'
+import Chat from '../src/app/components/messages/chat'
+import styles from "../src/app/components/messages/messages.module.css"
 
 const MessagesUI = () => {
     return (

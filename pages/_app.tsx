@@ -1,15 +1,14 @@
 import { AppProps } from 'next/app';
-import { AuthProvider } from './context/AuthProvider';
-import { ChatContextProvider } from './context/ChatContextProvider';
-import Footer from '@/app/scenes/footer/page';
+import { AuthProvider } from '../src/app/contexts/AuthProvider';
+import { ChatContextProvider } from '../src/app/contexts/ChatContextProvider';
+import '../src/app/globals.css'
 
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <AuthProvider>
             <ChatContextProvider>
                 <Component {...pageProps} />
-                {/* <Footer /> */}
             </ChatContextProvider>
         </AuthProvider>
     );

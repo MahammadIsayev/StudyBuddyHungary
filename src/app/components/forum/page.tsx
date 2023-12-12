@@ -4,12 +4,23 @@ import { SelectedPage } from '@/app/shared/types';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import { User } from 'firebase/auth';
-import { useUser } from '../../../../pages/context/AuthProvider';
+import { useUser } from '../../contexts/AuthProvider';
 import { PencilSquare } from 'react-bootstrap-icons';
-import PostModal from '@/app/threadmodal/page';
+import PostModal from '@/app/modals/threadmodal';
+import UserModal from '@/app/modals/usermodal';
 
 type Props = {
     setSelectedPage: (value: SelectedPage) => void;
+};
+
+type PostUser = {
+    id: string;
+    fullName: string;
+    city: string;
+    educationLevel: string;
+    university: string;
+    major: string;
+    profilePictureURL: string;
 };
 
 type Post = {
@@ -37,7 +48,9 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
     const [userColors, setUserColors] = useState<{ [userId: string]: string }>({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [scrollButtonVisible, setScrollButtonVisible] = useState(true);
+    const [selectedUserForModal, setSelectedUserForModal] = useState<PostUser | null>(null);
+    const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+
 
 
     const user: User | null = useUser();
@@ -249,6 +262,26 @@ const Forum = ({ setSelectedPage }: Props) => {
         closeModal();
     };
 
+    const openUserModal = async (authorId: string) => {
+        try {
+            const userDocRef = doc(db, 'users', authorId);
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data() as PostUser;
+                setSelectedUserForModal(userData);
+                setIsUserModalOpen(true);
+            } else {
+                console.error('User document does not exist for authorId:', authorId);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+    const closeUserModal = () => {
+        setIsUserModalOpen(false);
+    };
+
     return (
         <section id="forum" className="py-8 bg-blue-50">
             <h1 className="text-3xl font-semibold mb-6 text-center tracking-wide mt-24">Active Forum Threads</h1>
@@ -291,7 +324,17 @@ const Forum = ({ setSelectedPage }: Props) => {
                                     {paragraph}
                                 </React.Fragment>))}
                         </div>
-                        <h3 className="text-blue-500">@{post.fullName}</h3>
+                        <UserModal
+                            isOpen={isUserModalOpen}
+                            closeModal={closeUserModal}
+                            user={selectedUserForModal}
+                        />
+                        <h3
+                            className="text-blue-500 cursor-pointer"
+                            onClick={() => openUserModal(post.authorId)}
+                        >
+                            @{post.fullName}
+                        </h3>
                         <div className="flex items-center">
                             <textarea
                                 onChange={(e) => setCommentTexts((prev) => ({ ...prev, [post.id]: e.target.value }))}

@@ -1,13 +1,13 @@
 'use client';
-import Navbar from './scenes/navbar/page';
-import MainHome from './scenes/mainhome/page';
-import Community from './scenes/community/page';
+import Navbar from './components/navbar/page';
+import MainHome from './components/mainhome/page';
+import Community from './components/community/page';
 import { useEffect, useState } from 'react';
 import { SelectedPage } from './shared/types';
-import Forum from './scenes/forum/page';
-import { AuthProvider } from '../../pages/context/AuthProvider';
-import { ChatContextProvider } from '../../pages/context/ChatContextProvider';
-import Footer from './scenes/footer/page';
+import Forum from './components/forum/page';
+import { AuthProvider } from './contexts/AuthProvider';
+import { ChatContextProvider } from './contexts/ChatContextProvider';
+import Footer from './components/footer/page';
 
 export default function Home() {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);

@@ -2,7 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-
 body::-webkit-scrollbar {
     width: 0.5em;
 }

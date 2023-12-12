@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import styles from "./messages.module.css"
-import { AuthProvider, useUser } from './context/AuthProvider';
-import { ChatContext } from './context/ChatContextProvider';
+import { AuthProvider, useUser } from '../../contexts/AuthProvider';
+import { ChatContext } from '../../contexts/ChatContextProvider';
 import classNames from 'classnames';
 import { Timestamp } from 'firebase/firestore';
 

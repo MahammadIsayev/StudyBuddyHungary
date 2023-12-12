@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'fire
 import { doc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
-import { ChatContextProvider } from '../../../pages/context/ChatContextProvider';
+import { ChatContextProvider } from '../contexts/ChatContextProvider';
 import { useRouter } from 'next/navigation';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 

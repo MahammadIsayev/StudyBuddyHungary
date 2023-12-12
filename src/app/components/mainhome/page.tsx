@@ -7,7 +7,7 @@ import { MdSchool } from 'react-icons/md';
 import { FaComments } from 'react-icons/fa'
 import { PiBooksFill } from 'react-icons/pi'
 import { useState } from "react";
-import InstructionsModal from "@/app/instructionsmodal/page";
+import InstructionsModal from "@/app/modals/instructionsmodal";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
