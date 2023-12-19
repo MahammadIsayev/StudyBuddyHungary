@@ -29,6 +29,7 @@ type Post = {
     fullName: string;
     postText: string;
     title: string;
+    category: string;
 };
 
 type Comment = {
@@ -44,6 +45,7 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [postText, setPostText] = useState('');
     const [fullName, setFullName] = useState('');
     const [postLists, setPostsList] = useState<Post[]>([]);
+    const [category, setCategory] = useState('');
     const [comments, setComments] = useState<{ [postId: string]: Comment[] }>({});
     const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
     const [userColors, setUserColors] = useState<{ [userId: string]: string }>({});
@@ -93,7 +95,8 @@ const Forum = ({ setSelectedPage }: Props) => {
                     id: doc.id,
                     postText: doc.data().postText,
                     fullName: doc.data().author.fullName,
-                    authorId: doc.data().author.id
+                    authorId: doc.data().author.id,
+                    category: doc.data().category
                 }));
                 posts.forEach(post => {
                     if (post.authorId === auth.currentUser?.uid) {
@@ -162,9 +165,11 @@ const Forum = ({ setSelectedPage }: Props) => {
                             fullName,
                             id: authorId,
                         },
+                        category
                     });
                     setTitle('');
                     setPostText('');
+                    setCategory('');
                 } else {
                     console.error('Full name is null!');
                 }
@@ -301,6 +306,8 @@ const Forum = ({ setSelectedPage }: Props) => {
                 setTitle={setTitle}
                 postText={postText}
                 setPostText={setPostText}
+                category={category}
+                setCategory={setCategory}
             />
             <div className='flex flex-wrap justify-between mt-2 max-w-screen-xl mx-auto'>
                 {postLists.map((post) => (
@@ -308,7 +315,8 @@ const Forum = ({ setSelectedPage }: Props) => {
                     <div key={post.id} className={`bg-white rounded-md shadow-xl p-6 mt-4 w-full`}>
                         <div className="mb-4 flex justify-between items-center">
                             <div className="title">
-                                <h1 className="text-2xl font-semibold">{post.title}</h1>
+                                <h1 className="text-2xl font-semibold text-blue-500">{post.title}</h1>
+                                <p className="text-gray-500">Category: {post.category}</p>
                             </div>
                             {post.authorId === auth.currentUser?.uid &&
                                 <button onClick={() => deletePost(post.id)}>
@@ -317,7 +325,7 @@ const Forum = ({ setSelectedPage }: Props) => {
                                     </svg>
                                 </button>}
                         </div>
-                        <div className="postTextContainer mb-4">
+                        <div className="postTextContainer mb-4 text-gray-800">
                             {post.postText.split('\n').map((paragraph, index) => (
                                 <React.Fragment key={index}>
                                     {index > 0 && <br />}

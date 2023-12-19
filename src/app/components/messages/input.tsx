@@ -91,6 +91,9 @@ const Input = (props: Props) => {
             setImg(null);
         } catch (error) {
             console.error('Error handling send:', error);
+        } finally {
+            setText("");
+            setImg(null);
         }
     };
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

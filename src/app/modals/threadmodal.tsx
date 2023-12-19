@@ -1,5 +1,5 @@
 // PostModal.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { X } from 'react-bootstrap-icons';
 
@@ -10,7 +10,9 @@ interface PostModalProps {
     title: string;
     setTitle: (value: string) => void;
     postText: string;
+    category: string;
     setPostText: (value: string) => void;
+    setCategory: (value: string) => void;
 }
 
 const customStyles = {
@@ -40,8 +42,45 @@ const PostModal: React.FC<PostModalProps> = ({
     title,
     setTitle,
     postText,
+    category,
     setPostText,
+    setCategory
 }) => {
+    const [titleError, setTitleError] = useState('');
+    const [postTextError, setPostTextError] = useState('');
+    const [categoryError, setCategoryError] = useState('');
+
+    const clearErrors = () => {
+        setTitleError('');
+        setPostTextError('');
+        setCategoryError('');
+    };
+
+    const handleCreatePost = () => {
+        clearErrors();
+
+        // Validate fields
+        if (!title.trim()) {
+            setTitleError('Title can not be empty');
+            return;
+        }
+
+        if (!postText.trim()) {
+            setPostTextError('Post text can not be empty');
+            return;
+        }
+
+        if (!category) {
+            setCategoryError('Please, choose a category.');
+            return;
+        }
+
+        // Call createPost if all fields are valid
+        createPost();
+
+        // Close the modal after creating post (you can remove this line if you want to keep the modal open)
+        closeModal();
+    };
     return (
         <Modal
             isOpen={isOpen}
@@ -57,6 +96,22 @@ const PostModal: React.FC<PostModalProps> = ({
                 >
                     <X className='bg-red-600 text-white' />
                 </span>
+                <label className="block text-sm font-medium text-gray-700 mt-4" htmlFor="category">
+                    Category
+                </label>
+                <select
+                    id="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="mt-1 p-2 border rounded-md w-full focus:outline-none focus:ring focus:border-blue-300"
+                >
+                    <option value="" disabled>Category</option>
+                    <option value="General">General</option>
+                    <option value="Academic Discussion">Academic Discussion</option>
+                    <option value="University-specific">University-specific</option>
+                    <option value="Career Development">Career Development</option>
+                    <option value="Study Meetups">Study Meetups</option>
+                </select>
                 <label className="block text-sm font-medium text-gray-700 mt-4" htmlFor="title">
                     Title
                 </label>
@@ -85,13 +140,16 @@ const PostModal: React.FC<PostModalProps> = ({
                     rows={4}
                     cols={50}
                 ></textarea>
-
+                {titleError && <p className="text-red-500">{titleError}</p>}
+                {postTextError && <p className="text-red-500">{postTextError}</p>}
+                {categoryError && <p className="text-red-500">{categoryError}</p>}
                 <button
-                    onClick={createPost}
+                    onClick={handleCreatePost}
                     className="float-right bg-orange-500 text-white py-2 px-6 mt-8 rounded-md hover:bg-orange-600 transition duration-300"
                 >
                     Share
                 </button>
+
             </div>
         </Modal>
     );
