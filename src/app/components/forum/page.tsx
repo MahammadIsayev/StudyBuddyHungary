@@ -46,6 +46,7 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [fullName, setFullName] = useState('');
     const [postLists, setPostsList] = useState<Post[]>([]);
     const [category, setCategory] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [comments, setComments] = useState<{ [postId: string]: Comment[] }>({});
     const [commentTexts, setCommentTexts] = useState<{ [postId: string]: string }>({});
     const [userColors, setUserColors] = useState<{ [userId: string]: string }>({});
@@ -53,7 +54,7 @@ const Forum = ({ setSelectedPage }: Props) => {
     const [selectedUserForModal, setSelectedUserForModal] = useState<PostUser | null>(null);
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
-
+    const categories = ["General", "Academic Discussion", "University-specific", "Career Development", "Study Meetups"];
 
     const user: User | null = useUser();
 
@@ -149,6 +150,14 @@ const Forum = ({ setSelectedPage }: Props) => {
 
         getComments();
     }, [commentCollectionRef]);
+
+    const handleCategoryChange = (category: string) => {
+        setSelectedCategory(category === selectedCategory ? null : category);
+    };
+
+    const filteredPosts = selectedCategory
+        ? postLists.filter((post) => post.category === selectedCategory)
+        : postLists;
 
     const createPost = async () => {
         try {
@@ -290,7 +299,24 @@ const Forum = ({ setSelectedPage }: Props) => {
     return (
         <section id="forum" className="py-8 bg-blue-50">
             <h1 className="text-3xl font-semibold mb-6 text-center tracking-wide mt-24">Active Forum Threads</h1>
-
+            <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center">
+                <div className="mb-4 md:mb-0">
+                    <label className="block mb-2 text-gray-700">Filter by Category:</label>
+                    <select
+                        onChange={(e) => handleCategoryChange(e.target.value)}
+                        value={selectedCategory || ''}
+                        className="p-2 border rounded-md"
+                    >
+                        <option value="">All</option>
+                        {/* Assuming categories is an array of available categories */}
+                        {categories.map((category: string) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
             <button
                 onClick={openModal}
                 className={`fixed bottom-4 right-4 bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300`}
@@ -310,7 +336,7 @@ const Forum = ({ setSelectedPage }: Props) => {
                 setCategory={setCategory}
             />
             <div className='flex flex-wrap justify-between mt-2 max-w-screen-xl mx-auto'>
-                {postLists.map((post) => (
+                {filteredPosts.map((post) => (
 
                     <div key={post.id} className={`bg-white rounded-md shadow-xl p-6 mt-4 w-full`}>
                         <div className="mb-4 flex justify-between items-center">
