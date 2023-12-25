@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { SelectedPage } from '@/app/shared/types';
-import { universities, cities, educationLevels } from '@/app/shared/options';
 import { collection, getDocs } from 'firebase/firestore';
 import { db, storage } from '../../firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Search, ChevronLeft, ChevronRight, X } from 'react-bootstrap-icons';
 import { motion } from 'framer-motion';
 
@@ -17,7 +14,6 @@ type User = {
     university: string;
     major: string;
     profilePictureURL: string;
-    // profilePicture: string;
 };
 
 type Props = {
@@ -46,7 +42,7 @@ const Community = ({ setSelectedPage }: Props) => {
                 const usersSnapshot = await getDocs(usersCollection);
 
                 const userData: User[] = [];
-                const imageUrlPromises: Promise<string>[] = []; // Specify the Promise type
+                const imageUrlPromises: Promise<string>[] = []; 
 
                 usersSnapshot.forEach((doc) => {
                     const user = { id: doc.id, ...doc.data() } as User;
@@ -60,17 +56,15 @@ const Community = ({ setSelectedPage }: Props) => {
                     }
                 });
 
-                // all promises to resolve
+              
                 const imageUrls = await Promise.all(imageUrlPromises);
 
-                // Update user objects with the correct URLs
                 const usersWithImageUrls = userData.map((user, index) => ({
                     ...user,
                     profilePictureURL: user.profilePictureURL ? imageUrls[index] : '/assets/default-profile-picture.jpg',
                 }));
 
                 setUsers(usersWithImageUrls);
-                // console.log(usersWithImageUrls);
                 const startIndex = currentIndex * cardsPerPage;
                 const endIndex = startIndex + cardsPerPage;
                 setVisibleUsers(usersWithImageUrls.slice(startIndex, endIndex));
@@ -290,9 +284,6 @@ const Community = ({ setSelectedPage }: Props) => {
                                         <p className='text-sm text-gray-600'>University: {user.university}</p>
                                         <p className='text-sm text-gray-600'>Major: {user.major}</p>
                                         <p className='text-sm text-gray-600'>Education Level: {user.educationLevel}</p>
-                                        {/* <button className='bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full mt-4 float-right'>
-                                        Message
-                                    </button> */}
                                     </div>
                                 ))
                             )}

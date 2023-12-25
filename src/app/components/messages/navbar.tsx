@@ -14,19 +14,19 @@ const Navbar = (props: Props) => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
-                // Check if the user has a Firestore document
+               
                 const userDocRef = doc(db, 'users', user.uid);
                 const userDocSnapshot = await getDoc(userDocRef);
 
                 if (userDocSnapshot.exists()) {
-                    // Use Firestore profile data if available
+                    
                     const firestoreProfile = userDocSnapshot.data();
                     setUserProfile({
                         fullName: firestoreProfile?.fullName || null,
                         profilePictureURL: firestoreProfile?.profilePictureURL || user.photoURL || null,
                     });
                 } else {
-                    // Fallback to Firebase Authentication displayName
+                    
                     setUserProfile({
                         fullName: user.displayName || null,
                         profilePictureURL: user.photoURL || null,

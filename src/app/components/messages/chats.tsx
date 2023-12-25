@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styles from './messages.module.css';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '../../firebase';
+import { db } from '../../firebase';
 import { ChatContext } from '../../contexts/ChatContextProvider';
 import { useUser } from '../../contexts/AuthProvider';
 
@@ -21,21 +21,20 @@ interface ChatData {
 
 const Chats: React.FC = () => {
     const currentUser = useUser();
-    // console.log("Current User:", currentUser);
+    
     const [chats, setChats] = useState<Record<string, ChatData>>({});
     const { dispatch } = useContext(ChatContext);
 
 
 
     useEffect(() => {
-        // console.log("Effect is running");
+     
         const getChats = () => {
             if (currentUser) {
                 const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
                     try {
                         const data = doc.data();
                         if (data && Object.keys(data).length > 0) {
-                            // console.log("Chats document data:", data);
                             setChats(data);
                         } else {
                             console.log("No chats found for the current user yet.");

@@ -72,7 +72,6 @@ const UserModal: React.FC<UserModalProps> = ({ isOpen, closeModal, user }) => {
                 <p className="mb-2"><span className='font-medium'>University:  </span> {user.university}</p>
                 <p className="mb-2"><span className='font-medium'>Major:  </span> {user.major}</p>
                 <p className="mb-2"><span className='font-medium'>Education Level: </span>  {user.educationLevel}</p>
-                {/* Add other user details as needed */}
             </div>
         </Modal>
     );

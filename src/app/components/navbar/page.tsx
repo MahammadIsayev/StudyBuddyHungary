@@ -85,7 +85,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 <button type="button" onClick={() => window.open('/messagesui', '_blank')}>
                                     Messages
                                 </button>
-                                {/* <Link page="Messages" selectedPage={selectedPage} setSelectedPage={openMessagesPage} /> */}
                             </div>
                             <div className="text-md gap-8 flex items-center justify-between">
                                 <button onClick={() => setProfileModalOpen(true)}>My Profile</button>

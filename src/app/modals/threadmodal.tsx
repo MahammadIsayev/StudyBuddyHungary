@@ -58,8 +58,7 @@ const PostModal: React.FC<PostModalProps> = ({
 
     const handleCreatePost = () => {
         clearErrors();
-
-        // Validate fields
+        
         if (!title.trim()) {
             setTitleError('Title can not be empty');
             return;
@@ -75,10 +74,8 @@ const PostModal: React.FC<PostModalProps> = ({
             return;
         }
 
-        // Call createPost if all fields are valid
         createPost();
 
-        // Close the modal after creating post (you can remove this line if you want to keep the modal open)
         closeModal();
     };
     return (

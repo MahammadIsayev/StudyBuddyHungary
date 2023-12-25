@@ -72,8 +72,6 @@ const Signin = () => {
         background: `url('/assets/mainhome.png')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        // margin: 0,
-        // padding: '9.2%',
       }}>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">

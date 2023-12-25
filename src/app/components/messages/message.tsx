@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Timestamp } from 'firebase/firestore';
 
 const Message = ({ message }: any) => {
-  // console.log(message);
+
   const currentUser = useUser()
   const { data } = useContext(ChatContext);
   const ref = useRef<HTMLDivElement>(null);
@@ -16,9 +16,6 @@ const Message = ({ message }: any) => {
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   })
-  // console.log(data);
-  // console.log(isCurrentUser);
-
 
 
   return (
@@ -33,7 +30,6 @@ const Message = ({ message }: any) => {
         <span className={styles.messageDate}>{messageDate.toLocaleString()}</span>
       </div>
       <div className={styles.messageContent}>
-        {/* {message.img && <img src={message.img} alt="" className={styles.userProfPic2} />} */}
         <p className={styles.paragraph}>{message.text}</p>
       </div>
     </div>

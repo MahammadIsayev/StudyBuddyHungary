@@ -35,7 +35,6 @@ export default function Home() {
             <MainHome setSelectedPage={setSelectedPage} />
             <Community setSelectedPage={setSelectedPage} />
             <Forum setSelectedPage={setSelectedPage} />
-            {/* <MessagesUI /> */}
             <Footer />
           </div>
         </div>

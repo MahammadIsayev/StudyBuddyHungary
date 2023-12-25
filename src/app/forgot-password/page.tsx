@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function ForgotPassword() {
   const router = useRouter()
   const [email, setEmail] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(false); // New state variable for email validation
+  const [isEmailValid, setIsEmailValid] = useState(false); 
   const [isMailSent, setIsMailSent] = useState(false);
 
   const validateEmail = (email: any) => {
@@ -21,12 +21,8 @@ export default function ForgotPassword() {
       try {
         await sendPasswordResetEmail(auth, email);
         setIsMailSent(true);
-        // Provide feedback to the user, such as displaying a message that the reset email has been sent.
-        // You can add a state variable to manage this message.
       } catch (error) {
         console.error('Error sending reset email:', error);
-        // Handle the error, such as displaying an error message to the user.
-        // You can add a state variable to manage this error message.
       }
     }
   };
@@ -70,7 +66,7 @@ export default function ForgotPassword() {
             <div>
               <button
                 onClick={resetEmail}
-                disabled={!isEmailValid} // Disable the button if the email is not valid
+                disabled={!isEmailValid}
                 className={`flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${!isEmailValid ? 'cursor-not-allowed opacity-40' : ''
                   }`}
               >

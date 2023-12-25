@@ -3,7 +3,6 @@ import styles from './messages.module.css';
 import { auth, db } from '../../firebase';
 import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
-import { Chat } from 'react-bootstrap-icons';
 
 type Props = {};
 
@@ -13,7 +12,6 @@ const Search = (props: Props) => {
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [currentUserDetails, setCurrentUserDetails] = useState<any | null>(null);
     const [selectedUser, setSelectedUser] = useState<any | null>(null)
-    // const [openChatDirectly, setOpenChatDirectly] = useState<boolean>(false);
     const currentUser: User | null = auth.currentUser;
 
     useEffect(() => {
@@ -42,7 +40,7 @@ const Search = (props: Props) => {
             querySnapshot.forEach((doc) => {
                 const userData = doc.data();
                 if (searchQuery.trim() !== '' && userData.fullName.toLowerCase().includes(searchQuery.toLowerCase())) {
-                    results.push({ ...userData, uid: doc.id }); // Include uid from document ID
+                    results.push({ ...userData, uid: doc.id });
                 }
             });
 
@@ -70,28 +68,21 @@ const Search = (props: Props) => {
             }
 
 
-            // console.log('Selected User:', selectedUser);
-            // console.log('Current User:', currentUser);
-
             const combinedID =
                 currentUser.uid > selectedUserUid
                     ? currentUser.uid + selectedUserUid
                     : selectedUserUid + currentUser.uid;
 
-            // console.log('Combined ID:', combinedID);
 
             try {
                 const chatDocRef = doc(db, 'chats', combinedID);
                 const chatDoc = await getDoc(chatDocRef);
 
-                // console.log('Existing Chat Doc:', chatDoc.data()); 
 
                 if (!chatDoc.exists()) {
-                    // Creating a chat in "chats" collection
+                
                     await setDoc(chatDocRef, { messages: [] });
 
-                    // Creating user chats
-                    // console.log('Updating userChats for current user...');
                     await updateDoc(doc(db, 'userChats', currentUser.uid), {
                         [combinedID]: {
                             chatId: combinedID,
@@ -121,7 +112,6 @@ const Search = (props: Props) => {
                         prevResults.filter((user) => user.uid !== selectedUser.uid)
                     );
 
-                    // Clear the search bar
                     setSearchQuery('');
                     setSelectedUser(selectedUser);
 
@@ -177,7 +167,6 @@ const Search = (props: Props) => {
                 ))}
             </div>
             {searchResults.length > 0 && <hr />}
-            {/* {openChatDirectly && <Chat />} */}
         </div>
     );
 };

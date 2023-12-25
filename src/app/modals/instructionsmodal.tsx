@@ -68,8 +68,6 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onRequest
                                 </ul>
                             </p>
                         </div>
-
-                        {/* Tips go inside a container div */}
                         <div className="tips-container">
                             <p className="mb-4">
                                 <strong>Important tips:</strong>

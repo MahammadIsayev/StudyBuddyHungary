@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import { SelectedPage } from '@/app/shared/types';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
@@ -101,7 +101,7 @@ const Forum = ({ setSelectedPage }: Props) => {
                 }));
                 posts.forEach(post => {
                     if (post.authorId === auth.currentUser?.uid) {
-                        post.fullName = fullName;  // Update with the latest full name
+                        post.fullName = fullName;
                     }
                 });
                 setPostsList(posts);
@@ -126,7 +126,6 @@ const Forum = ({ setSelectedPage }: Props) => {
                     commentQuerySnapshot.forEach((commentDoc) => {
                         const commentAuthorId = commentDoc.data().authorId;
 
-                        // Update the full name for the current user
                         const updatedFullName = (commentAuthorId === auth.currentUser?.uid) ? fullName : commentDoc.data().fullName;
                         postComments.push({
                             id: commentDoc.id,
@@ -161,11 +160,9 @@ const Forum = ({ setSelectedPage }: Props) => {
 
     const createPost = async () => {
         try {
-            //  if user is authenticated
             if (auth.currentUser) {
                 const authorId = auth.currentUser.uid;
 
-                //  if fullName is not null before creating the post
                 if (fullName !== null) {
                     await addDoc(postCollectionRef, {
                         title,
@@ -238,10 +235,8 @@ const Forum = ({ setSelectedPage }: Props) => {
         const letters = '0123456789ABCDEF';
         let color = '#';
 
-        // Define the colors to exclude
-        const excludeColors = ['#FFFFFF', '#ECF4FD'];  // Add more colors as needed
+        const excludeColors = ['#FFFFFF', '#ECF4FD']; 
 
-        // Generate a new color until a non-excluded color is found
         do {
             for (let i = 0; i < 6; i++) {
                 color += letters[Math.floor(Math.random() * 16)];
@@ -252,12 +247,10 @@ const Forum = ({ setSelectedPage }: Props) => {
     };
 
     const getColorForUser = (userId: string) => {
-        // Check if the color is already assigned for the user
         if (userColors[userId]) {
             return userColors[userId];
         }
 
-        // If not, generate a random color and store it
         const newColor = getRandomColor();
         setUserColors((prevColors) => ({ ...prevColors, [userId]: newColor }));
         return newColor;
@@ -308,7 +301,6 @@ const Forum = ({ setSelectedPage }: Props) => {
                         className="p-2 border rounded-md"
                     >
                         <option value="">All</option>
-                        {/* Assuming categories is an array of available categories */}
                         {categories.map((category: string) => (
                             <option key={category} value={category}>
                                 {category}

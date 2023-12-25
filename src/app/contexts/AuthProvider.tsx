@@ -25,7 +25,6 @@ interface AuthProviderProps {
     children: ReactNode;
 }
 
-// HOC to provide the user state to components
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 

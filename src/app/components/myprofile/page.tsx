@@ -14,8 +14,8 @@ interface ProfileData {
 }
 
 interface Props {
-    isProfileModalOpen: boolean; // Receive the isProfileModalOpen state as a prop
-    setProfileModalOpen: (isOpen: boolean) => void; // Receive the setProfileModalOpen function as a prop
+    isProfileModalOpen: boolean;
+    setProfileModalOpen: (isOpen: boolean) => void; 
 }
 
 const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen }) => {
@@ -33,7 +33,6 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
     const [fileError, setFileError] = useState<string | null>(null);
     const [updateSuccess, setUpdateSuccess] = useState(false);
 
-    // console.log("Updated profile data:", updatedProfileData);
     const user: User | null = auth.currentUser;
 
     const fetchUserProfile = async () => {
@@ -42,7 +41,6 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
                 const userData = userDoc.data() as ProfileData;
-                // console.log("User data retrieved:", userData);
                 setUpdatedProfileData(userData);
             }
 
@@ -51,7 +49,6 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
     useEffect(() => {
         if (isProfileModalOpen && user) {
-            // console.log("Fetching user profile data when modal is open.");
             fetchUserProfile();
         }
     }, [isProfileModalOpen, user]);
@@ -68,7 +65,6 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
             const userDocRef = doc(db, 'users', user.uid);
             const updatedFields: Partial<ProfileData> = {};
 
-            // Always include fields, even if they are empty
             updatedFields.fullName = updatedProfileData.fullName;
             updatedFields.university = updatedProfileData.university;
             updatedFields.major = updatedProfileData.major;
@@ -77,21 +73,20 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
 
             if (profilePicture) {
                 try {
-                    // Upload profile picture to Firebase Storage
+            
                     const storageRef = ref(storage, `profile-pictures/${user.uid}`);
                     await uploadBytes(storageRef, profilePicture);
 
-                    // Get the download URL of the uploaded picture
+            
                     const downloadURL = await getDownloadURL(storageRef);
 
-                    // Update user profile with the image URL in Firestore
                     updatedFields.profilePictureURL = downloadURL;
                 } catch (error) {
                     console.error('Error uploading profile picture:', error);
                 }
             }
 
-            // Update user profile with the new fields in Firestore
+
             await setDoc(userDocRef, updatedFields, { merge: true });
 
             setUpdating(false);
@@ -116,7 +111,7 @@ const MyProfile: React.FC<Props> = ({ isProfileModalOpen, setProfileModalOpen })
     };
 
     const isImageFile = (file: File): boolean => {
-        // List of allowed image MIME types
+
         const allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
         return allowedImageTypes.includes(file.type);

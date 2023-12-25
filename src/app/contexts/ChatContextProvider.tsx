@@ -20,7 +20,6 @@ export const ChatContext = createContext<any>(null);
 
 export const ChatContextProvider: React.FC<ChatContextProps> = ({ children }) => {
     const currentUser: User | null = auth.currentUser;
-    // console.log('Current User:', currentUser);
     const INITIAL_STATE: ChatState = {
         chatId: 'null',
         user: {},

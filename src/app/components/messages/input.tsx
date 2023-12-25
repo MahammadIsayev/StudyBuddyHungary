@@ -25,18 +25,16 @@ const Input = (props: Props) => {
             console.error('Current user is null');
             return;
         }
-
         try {
             const chatDocRef = doc(db, 'chats', data.chatId);
             const chatDoc = await getDoc(chatDocRef);
 
             if (!chatDoc.exists()) {
-                // Create the chat document if it doesn't exist
+               
                 await setDoc(chatDocRef, { messages: [] });
             }
 
             if (img) {
-                // Upload image and update document
                 const storageRef = ref(storage, uuid());
                 const uploadTask = uploadBytesResumable(storageRef, img);
 
@@ -44,7 +42,7 @@ const Input = (props: Props) => {
                     'state_changed',
                     (error) => {
                         console.error('Error uploading image:', error);
-                        // TODO: Handle the error appropriately
+                        
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -61,7 +59,6 @@ const Input = (props: Props) => {
                     }
                 );
             } else {
-                // Update document with text message
                 await updateDoc(chatDocRef, {
                     messages: arrayUnion({
                         id: uuid(),
@@ -71,8 +68,6 @@ const Input = (props: Props) => {
                     }),
                 });
             }
-
-            // Update userChats documents for both users
             await updateDoc(doc(db, "userChats", currentUser.uid), {
                 [data.chatId + ".lastMessage"]: {
                     text,

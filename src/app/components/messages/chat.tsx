@@ -6,7 +6,6 @@ import { ChatContext } from '../../contexts/ChatContextProvider';
 
 const Chat: React.FC = () => {
     const { data } = useContext(ChatContext);
-    // console.log('User Data:', data.user);
 
     const fullName = data.user?.fullName || '';
     const profilePictureURL = data.user?.photoURL || '';
